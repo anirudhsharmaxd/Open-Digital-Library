@@ -1,4 +1,5 @@
 node_modules/
+.env
 library.db
 library.db-shm
 library.db-wal

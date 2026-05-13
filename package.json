@@ -10,12 +10,13 @@
   "keywords": [
     "library",
     "express",
-    "sqlite"
+    "supabase"
   ],
   "author": "Student",
   "license": "MIT",
   "dependencies": {
-    "better-sqlite3": "^12.10.0",
+    "@supabase/supabase-js": "^2.105.4",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1"
   }
 }
