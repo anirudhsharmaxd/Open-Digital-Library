@@ -1,0 +1,21 @@
+{
+  "name": "open-digital-library",
+  "version": "1.0.0",
+  "description": "A full-stack Open Digital Library — College Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "library",
+    "express",
+    "sqlite"
+  ],
+  "author": "Student",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "express": "^5.2.1"
+  }
+}

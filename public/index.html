@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open Digital Library</title>
+  <meta name="description" content="A free, open digital library for CS, Data Analytics, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand"><span class="nav-icon">📖</span><span class="nav-title">Open Digital Library</span></div>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link">Home</a>
+      <a href="#books-section" class="nav-link">Browse</a>
+      <a href="#add-section" class="nav-link">Add Book</a>
+    </div>
+  </nav>
+
+  <section class="hero" id="hero">
+    <div class="hero-shape shape-1"></div>
+    <div class="hero-shape shape-2"></div>
+    <div class="hero-shape shape-3"></div>
+    <div class="hero-content">
+      <h1 class="hero-heading">Discover Your Next<br/><span class="gradient-text">Favourite Book</span></h1>
+      <p class="hero-sub">A free, open library for Computer Science, Data Analytics &amp; beyond.</p>
+      <div class="search-container glass-card" id="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="search-input" class="search-input" placeholder="Search by title, author, or category…" autocomplete="off" />
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat"><span class="stat-number" id="stat-total">0</span><span class="stat-label">Books</span></div>
+        <div class="stat"><span class="stat-number" id="stat-categories">0</span><span class="stat-label">Categories</span></div>
+        <div class="stat"><span class="stat-number" id="stat-authors">0</span><span class="stat-label">Authors</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="books-section" id="books-section">
+    <div class="section-header">
+      <h2 class="section-title">📚 Library Collection</h2>
+      <p class="section-sub">Browse through our curated selection of books</p>
+      <div class="filter-pills" id="filter-pills">
+        <button class="pill active" data-category="all">All</button>
+      </div>
+    </div>
+    <div class="book-grid" id="book-grid">
+      <div class="loading-skeleton">
+        <div class="skeleton-card"></div><div class="skeleton-card"></div>
+        <div class="skeleton-card"></div><div class="skeleton-card"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="add-section" id="add-section">
+    <div class="section-header">
+      <h2 class="section-title">➕ Add a New Book</h2>
+      <p class="section-sub">Contribute to the library by adding a new book</p>
+    </div>
+    <form class="add-form glass-card" id="add-book-form" autocomplete="off">
+      <div class="form-group">
+        <label for="input-title">Book Title *</label>
+        <input type="text" id="input-title" placeholder="e.g. Design Patterns" required />
+      </div>
+      <div class="form-group">
+        <label for="input-author">Author *</label>
+        <input type="text" id="input-author" placeholder="e.g. Erich Gamma" required />
+      </div>
+      <div class="form-group">
+        <label for="input-category">Category</label>
+        <select id="input-category">
+          <option value="Computer Science">Computer Science</option>
+          <option value="Data Analytics">Data Analytics</option>
+          <option value="Software Engineering">Software Engineering</option>
+          <option value="Mathematics">Mathematics</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="input-cover">Cover Image URL</label>
+        <input type="url" id="input-cover" placeholder="https://example.com/cover.jpg" />
+      </div>
+      <button type="submit" class="btn-submit" id="btn-submit">
+        <span class="btn-text">Add Book</span>
+        <span class="btn-loader" id="btn-loader"></span>
+      </button>
+      <div class="toast" id="toast"></div>
+    </form>
+  </section>
+
+  <footer class="footer"><p>&copy; 2026 Open Digital Library &mdash; A College Project</p></footer>
+  <script src="app.js"></script>
+</body>
+</html>
