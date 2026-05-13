@@ -71,6 +71,226 @@ const seedBooks = [
     author: 'Cole Nussbaumer Knaflic',
     category: 'Data Analytics',
     cover_image_url: 'https://m.media-amazon.com/images/I/41bom5v0sQL._SX397_BO1,204,203,200_.jpg'
+  },
+  {
+    title: 'Think Python, 2nd Edition',
+    author: 'Allen B. Downey',
+    category: 'Computer Science',
+    storage_path: 'https://greenteapress.com/thinkpython2/thinkpython2.pdf',
+    file_name: 'Think Python, 2nd Edition.pdf',
+    file_size: 1
+  },
+  {
+    title: 'Think Stats, 2nd Edition',
+    author: 'Allen B. Downey',
+    category: 'Data Analytics',
+    storage_path: 'https://greenteapress.com/thinkstats2/thinkstats2.pdf',
+    file_name: 'Think Stats, 2nd Edition.pdf',
+    file_size: 1
+  },
+  {
+    title: 'Think Bayes, 2nd Edition',
+    author: 'Allen B. Downey',
+    category: 'Data Analytics',
+    storage_path: 'https://allendowney.github.io/ThinkBayes2/',
+    file_name: 'Think Bayes, 2nd Edition.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Think DSP',
+    author: 'Allen B. Downey',
+    category: 'Computer Science',
+    storage_path: 'https://greenteapress.com/thinkdsp/thinkdsp.pdf',
+    file_name: 'Think DSP.pdf',
+    file_size: 1
+  },
+  {
+    title: 'Automate the Boring Stuff with Python',
+    author: 'Al Sweigart',
+    category: 'Computer Science',
+    storage_path: 'https://automatetheboringstuff.com/2e/',
+    file_name: 'Automate the Boring Stuff with Python.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Python for Everybody',
+    author: 'Charles R. Severance',
+    category: 'Computer Science',
+    storage_path: 'https://www.py4e.com/book',
+    file_name: 'Python for Everybody.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Eloquent JavaScript',
+    author: 'Marijn Haverbeke',
+    category: 'Computer Science',
+    storage_path: 'https://eloquentjavascript.net/',
+    file_name: 'Eloquent JavaScript.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Pro Git',
+    author: 'Scott Chacon and Ben Straub',
+    category: 'Software Engineering',
+    storage_path: 'https://git-scm.com/book/en/v2',
+    file_name: 'Pro Git.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'The Rust Programming Language',
+    author: 'Steve Klabnik and Carol Nichols',
+    category: 'Software Engineering',
+    storage_path: 'https://doc.rust-lang.org/book/',
+    file_name: 'The Rust Programming Language.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Effective Go',
+    author: 'The Go Authors',
+    category: 'Software Engineering',
+    storage_path: 'https://go.dev/doc/effective_go',
+    file_name: 'Effective Go.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Crafting Interpreters',
+    author: 'Robert Nystrom',
+    category: 'Computer Science',
+    storage_path: 'https://craftinginterpreters.com/',
+    file_name: 'Crafting Interpreters.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Structure and Interpretation of Computer Programs',
+    author: 'Harold Abelson, Gerald Jay Sussman, and Julie Sussman',
+    category: 'Computer Science',
+    storage_path: 'https://web.mit.edu/6.001/6.037/sicp.pdf',
+    file_name: 'Structure and Interpretation of Computer Programs.pdf',
+    file_size: 1
+  },
+  {
+    title: 'Operating Systems: Three Easy Pieces',
+    author: 'Remzi H. Arpaci-Dusseau and Andrea C. Arpaci-Dusseau',
+    category: 'Computer Science',
+    storage_path: 'https://pages.cs.wisc.edu/~remzi/OSTEP/',
+    file_name: 'Operating Systems Three Easy Pieces.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'The Missing Semester of Your CS Education',
+    author: 'MIT CSAIL',
+    category: 'Computer Science',
+    storage_path: 'https://missing.csail.mit.edu/',
+    file_name: 'The Missing Semester.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Composing Programs',
+    author: 'John DeNero',
+    category: 'Computer Science',
+    storage_path: 'https://www.composingprograms.com/',
+    file_name: 'Composing Programs.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'How to Design Programs',
+    author: 'Matthias Felleisen et al.',
+    category: 'Computer Science',
+    storage_path: 'https://htdp.org/2023-8-14/Book/index.html',
+    file_name: 'How to Design Programs.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'OCaml Programming: Correct + Efficient + Beautiful',
+    author: 'Michael R. Clarkson et al.',
+    category: 'Computer Science',
+    storage_path: 'https://cs3110.github.io/textbook/cover.html',
+    file_name: 'OCaml Programming.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Python Data Science Handbook',
+    author: 'Jake VanderPlas',
+    category: 'Data Analytics',
+    storage_path: 'https://jakevdp.github.io/PythonDataScienceHandbook/',
+    file_name: 'Python Data Science Handbook.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Python for Data Analysis',
+    author: 'Wes McKinney',
+    category: 'Data Analytics',
+    storage_path: 'https://wesmckinney.com/book/',
+    file_name: 'Python for Data Analysis.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Computational and Inferential Thinking',
+    author: 'Ani Adhikari, John DeNero, and David Wagner',
+    category: 'Data Analytics',
+    storage_path: 'https://www.inferentialthinking.com/chapters/intro',
+    file_name: 'Computational and Inferential Thinking.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Statistical Thinking for the 21st Century',
+    author: 'Russell A. Poldrack',
+    category: 'Data Analytics',
+    storage_path: 'https://statsthinking21.github.io/statsthinking21-core-site/',
+    file_name: 'Statistical Thinking for the 21st Century.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'OpenIntro Statistics',
+    author: 'David M. Diez, Mine Cetinkaya-Rundel, and Christopher D. Barr',
+    category: 'Data Analytics',
+    storage_path: 'https://www.openintro.org/book/os/',
+    file_name: 'OpenIntro Statistics.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Mining of Massive Datasets',
+    author: 'Jure Leskovec, Anand Rajaraman, and Jeff Ullman',
+    category: 'Data Analytics',
+    storage_path: 'http://infolab.stanford.edu/~ullman/mmds/book.pdf',
+    file_name: 'Mining of Massive Datasets.pdf',
+    file_size: 1
+  },
+  {
+    title: 'Dive Into Systems',
+    author: 'Suzanne J. Matthews, Tia Newhall, and Kevin C. Webb',
+    category: 'Computer Science',
+    storage_path: 'https://diveintosystems.org/book/',
+    file_name: 'Dive Into Systems.html',
+    file_mime_type: 'text/html',
+    file_size: 1
+  },
+  {
+    title: 'Deep Learning',
+    author: 'Ian Goodfellow, Yoshua Bengio, and Aaron Courville',
+    category: 'Data Analytics',
+    storage_path: 'https://www.deeplearningbook.org/',
+    file_name: 'Deep Learning.html',
+    file_mime_type: 'text/html',
+    file_size: 1
   }
 ];
 
@@ -191,16 +411,45 @@ async function ensureSeedBooks() {
   seedStarted = true;
 
   try {
-    const { count, error: countError } = await supabase
+    const { data: existingBooks, error: fetchError } = await supabase
       .from('books')
-      .select('id', { count: 'exact', head: true });
+      .select('id, title, storage_path, file_size');
 
-    if (countError) {
-      throw countError;
+    if (fetchError) {
+      throw fetchError;
     }
 
-    if (count === 0) {
-      await insertBooks(seedBooks);
+    const existingByTitle = new Map(
+      existingBooks.map((book) => [book.title.trim().toLowerCase(), book])
+    );
+    const missingBooks = seedBooks.filter(
+      (book) => !existingByTitle.has(book.title.trim().toLowerCase())
+    );
+
+    if (missingBooks.length > 0) {
+      await insertBooks(missingBooks);
+    }
+
+    for (const book of seedBooks) {
+      if (!book.storage_path) {
+        continue;
+      }
+
+      const existingBook = existingByTitle.get(book.title.trim().toLowerCase());
+      const alreadyReadable = existingBook
+        && existingBook.storage_path
+        && Number(existingBook.file_size || 0) > 0;
+
+      if (existingBook && !alreadyReadable) {
+        const { error: updateError } = await supabase
+          .from('books')
+          .update(toSupabaseBook(book))
+          .eq('id', existingBook.id);
+
+        if (updateError) {
+          throw updateError;
+        }
+      }
     }
   } catch (err) {
     seedStarted = false;
@@ -282,6 +531,49 @@ app.get('/api/books/:id/read', async (req, res) => {
   } catch (err) {
     console.error('Error opening book:', err);
     res.status(500).json({ error: 'Failed to open book' });
+  }
+});
+
+app.delete('/api/books/:id', async (req, res) => {
+  try {
+    if (!requireSupabase(res)) {
+      return;
+    }
+
+    const { data: book, error: fetchError } = await supabase
+      .from('books')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    const { error: deleteError } = await supabase
+      .from('books')
+      .delete()
+      .eq('id', req.params.id);
+
+    if (deleteError) {
+      throw deleteError;
+    }
+
+    if (book.storage_path && !/^https?:\/\//i.test(book.storage_path)) {
+      const { error: storageError } = await supabase
+        .storage
+        .from(BOOKS_BUCKET)
+        .remove([book.storage_path]);
+
+      if (storageError) {
+        console.warn('Book row deleted, but storage cleanup failed:', storageError);
+      }
+    }
+
+    res.status(204).send();
+  } catch (err) {
+    console.error('Error deleting book:', err);
+    res.status(500).json({ error: 'Failed to delete book' });
   }
 });
 

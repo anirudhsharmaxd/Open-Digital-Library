@@ -240,14 +240,18 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(135deg, rgba(108,99,255,.2), rgba(224,64,251,.15));
   color: var(--accent-2);
 }
-.btn-read {
-  display: block;
-  width: 100%;
+.book-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .6rem;
   margin-top: 1rem;
+}
+.btn-read,
+.btn-delete {
+  width: 100%;
   padding: .65rem .85rem;
   border: 1px solid rgba(108,99,255,.45);
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, rgba(108,99,255,.22), rgba(0,188,212,.16));
   color: var(--text-primary);
   font-family: var(--font);
   font-size: .82rem;
@@ -255,12 +259,26 @@ img { max-width: 100%; display: block; }
   cursor: pointer;
   transition: var(--transition);
 }
+.btn-read {
+  background: linear-gradient(135deg, rgba(108,99,255,.22), rgba(0,188,212,.16));
+}
 .btn-read:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: var(--accent-3);
   box-shadow: 0 8px 24px rgba(0,188,212,.18);
 }
-.btn-read:disabled {
+.btn-delete {
+  background: rgba(255,60,60,.12);
+  border-color: rgba(255,60,60,.35);
+  color: #ff8a8a;
+}
+.btn-delete:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(255,60,60,.65);
+  box-shadow: 0 8px 24px rgba(255,60,60,.15);
+}
+.btn-read:disabled,
+.btn-delete:disabled {
   cursor: not-allowed;
   opacity: .55;
 }

@@ -91,13 +91,21 @@ function renderBooks(books) {
         <div class="book-title">${escapeHtml(book.title)}</div>
         <div class="book-author">by ${escapeHtml(book.author)}</div>
         <span class="book-category">${escapeHtml(book.category)}</span>
-        <button class="btn-read"
-                type="button"
-                data-book-id="${escapeHtml(book.id)}"
-                ${book.can_read ? '' : 'disabled'}
-                title="${book.can_read ? 'Open PDF' : 'PDF file is not uploaded for this book yet'}">
-          ${book.can_read ? 'Read Book' : 'PDF Missing'}
-        </button>
+        <div class="book-actions">
+          <button class="btn-read"
+                  type="button"
+                  data-book-id="${escapeHtml(book.id)}"
+                  ${book.can_read ? '' : 'disabled'}
+                  title="${book.can_read ? 'Open book' : 'File is not uploaded for this book yet'}">
+            ${book.can_read ? 'Read Book' : 'File Missing'}
+          </button>
+          <button class="btn-delete"
+                  type="button"
+                  data-book-id="${escapeHtml(book.id)}"
+                  data-book-title="${escapeHtml(book.title)}">
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -129,6 +137,44 @@ bookGrid.addEventListener('click', async (event) => {
   } finally {
     readButton.disabled = false;
     readButton.textContent = originalText;
+  }
+});
+
+bookGrid.addEventListener('click', async (event) => {
+  const deleteButton = event.target.closest('.btn-delete');
+
+  if (!deleteButton) {
+    return;
+  }
+
+  const bookTitle = deleteButton.dataset.bookTitle || 'this book';
+  const confirmed = window.confirm(`Delete "${bookTitle}" from the library?`);
+
+  if (!confirmed) {
+    return;
+  }
+
+  deleteButton.disabled = true;
+  const originalText = deleteButton.textContent;
+  deleteButton.textContent = 'Deleting...';
+
+  try {
+    const response = await fetch(`/api/books/${encodeURIComponent(deleteButton.dataset.bookId)}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || 'Unable to delete book.');
+    }
+
+    showToast(`"${bookTitle}" deleted.`, 'success');
+    await fetchBooks();
+  } catch (err) {
+    console.error('Error deleting book:', err);
+    showToast(err.message || 'Unable to delete book.', 'error');
+    deleteButton.disabled = false;
+    deleteButton.textContent = originalText;
   }
 });
 
