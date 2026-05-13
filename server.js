@@ -79,6 +79,93 @@ const supabase = supabaseUrl && supabaseKey
 
 let seedStarted = false;
 
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    || 'book';
+}
+
+function normalizeBook(book) {
+  return {
+    id: book.id,
+    title: book.title,
+    author: book.author,
+    category: book.category || book.subject || 'General',
+    cover_image_url: book.cover_image_url || book.cover_url || ''
+  };
+}
+
+function toSupabaseBook(book) {
+  const title = book.title;
+  const fileName = book.file_name || `${title}.pdf`;
+
+  return {
+    title,
+    author: book.author,
+    subject: book.category || book.subject || 'General',
+    description: book.description || '',
+    cover_image_url: book.cover_image_url || book.cover || '',
+    storage_path: book.storage_path || `manual/${Date.now()}-${slugify(title)}.pdf`,
+    file_name: fileName,
+    file_mime_type: book.file_mime_type || 'application/pdf',
+    file_size: Number(book.file_size || 0)
+  };
+}
+
+function isMissingColumnError(error) {
+  return error?.code === 'PGRST204'
+    && error?.message?.includes('Could not find the')
+    && error?.message?.includes('column');
+}
+
+function isSubjectRequiredError(error) {
+  return error?.code === '23502'
+    && error?.message?.includes('column "subject"');
+}
+
+async function insertBooks(books) {
+  const { error } = await supabase
+    .from('books')
+    .insert(books.map(toSupabaseBook));
+
+  if (!error) {
+    return;
+  }
+
+  if (!isMissingColumnError(error) && !isSubjectRequiredError(error)) {
+    throw error;
+  }
+
+  const fallbackBooks = books.map(({ title, author, category, subject }) => ({
+    title,
+    author,
+    subject: category || subject || 'General'
+  }));
+
+  let { error: fallbackError } = await supabase
+    .from('books')
+    .insert(fallbackBooks);
+
+  if (isMissingColumnError(fallbackError)) {
+    const minimalBooks = books.map(({ title, author }) => ({
+      title,
+      author
+    }));
+
+    const minimalResponse = await supabase
+      .from('books')
+      .insert(minimalBooks);
+
+    fallbackError = minimalResponse.error;
+  }
+
+  if (fallbackError) {
+    throw fallbackError;
+  }
+}
+
 async function ensureSeedBooks() {
   if (seedStarted || !supabase) {
     return;
@@ -86,22 +173,21 @@ async function ensureSeedBooks() {
 
   seedStarted = true;
 
-  const { count, error: countError } = await supabase
-    .from('books')
-    .select('id', { count: 'exact', head: true });
-
-  if (countError) {
-    throw countError;
-  }
-
-  if (count === 0) {
-    const { error: insertError } = await supabase
+  try {
+    const { count, error: countError } = await supabase
       .from('books')
-      .insert(seedBooks);
+      .select('id', { count: 'exact', head: true });
 
-    if (insertError) {
-      throw insertError;
+    if (countError) {
+      throw countError;
     }
+
+    if (count === 0) {
+      await insertBooks(seedBooks);
+    }
+  } catch (err) {
+    seedStarted = false;
+    throw err;
   }
 }
 
@@ -126,14 +212,14 @@ app.get('/api/books', async (req, res) => {
 
     const { data, error } = await supabase
       .from('books')
-      .select('id, title, author, category, cover_image_url')
-      .order('id', { ascending: false });
+      .select('*')
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw error;
     }
 
-    res.json(data);
+    res.json(data.map(normalizeBook));
   } catch (err) {
     console.error('Error fetching books:', err);
     res.status(500).json({ error: 'Failed to fetch books' });
@@ -154,22 +240,48 @@ app.post('/api/books', async (req, res) => {
       });
     }
 
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('books')
-      .insert({
+      .insert(toSupabaseBook({
         title,
         author,
         category: category || 'General',
         cover_image_url: cover_image_url || ''
-      })
-      .select('id, title, author, category, cover_image_url')
+      }))
+      .select('*')
       .single();
+
+    if (isMissingColumnError(error) || isSubjectRequiredError(error)) {
+      const fallbackResponse = await supabase
+        .from('books')
+        .insert({
+          title,
+          author,
+          subject: category || 'General'
+        })
+        .select('*')
+        .single();
+
+      data = fallbackResponse.data;
+      error = fallbackResponse.error;
+    }
+
+    if (isMissingColumnError(error)) {
+      const minimalResponse = await supabase
+        .from('books')
+        .insert({ title, author })
+        .select('*')
+        .single();
+
+      data = minimalResponse.data;
+      error = minimalResponse.error;
+    }
 
     if (error) {
       throw error;
     }
 
-    res.status(201).json(data);
+    res.status(201).json(normalizeBook(data));
   } catch (err) {
     console.error('Error adding book:', err);
     res.status(500).json({ error: 'Failed to add book' });
