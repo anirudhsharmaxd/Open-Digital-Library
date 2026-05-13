@@ -27,9 +27,33 @@ const toast         = document.getElementById('toast');
 const statTotal     = document.getElementById('stat-total');
 const statCategories= document.getElementById('stat-categories');
 const statAuthors   = document.getElementById('stat-authors');
+const authButton    = document.getElementById('auth-button');
 
 // Track current active category filter
 let activeCategory = 'all';
+let currentUser = localStorage.getItem('libraryUser') || '';
+let favoriteIds = loadFavorites();
+
+function favoritesKey() {
+  return `libraryFavorites:${currentUser || 'guest'}`;
+}
+
+function loadFavorites() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(favoritesKey()) || '[]'));
+  } catch (err) {
+    return new Set();
+  }
+}
+
+function saveFavorites() {
+  localStorage.setItem(favoritesKey(), JSON.stringify([...favoriteIds]));
+}
+
+function updateAuthButton() {
+  authButton.textContent = currentUser ? `Hi, ${currentUser}` : 'Sign In';
+  authButton.classList.toggle('signed-in', Boolean(currentUser));
+}
 
 // ==========================================================
 //  1. FETCH BOOKS FROM THE API
@@ -92,18 +116,18 @@ function renderBooks(books) {
         <div class="book-author">by ${escapeHtml(book.author)}</div>
         <span class="book-category">${escapeHtml(book.category)}</span>
         <div class="book-actions">
+          <button class="btn-favorite ${favoriteIds.has(String(book.id)) ? 'active' : ''}"
+                  type="button"
+                  data-book-id="${escapeHtml(book.id)}"
+                  title="Mark as favourite">
+            ${favoriteIds.has(String(book.id)) ? 'Favourite' : 'Mark Favourite'}
+          </button>
           <button class="btn-read"
                   type="button"
                   data-book-id="${escapeHtml(book.id)}"
                   ${book.can_read ? '' : 'disabled'}
                   title="${book.can_read ? 'Open book' : 'File is not uploaded for this book yet'}">
             ${book.can_read ? 'Read Book' : 'File Missing'}
-          </button>
-          <button class="btn-delete"
-                  type="button"
-                  data-book-id="${escapeHtml(book.id)}"
-                  data-book-title="${escapeHtml(book.title)}">
-            Delete
           </button>
         </div>
       </div>
@@ -140,42 +164,30 @@ bookGrid.addEventListener('click', async (event) => {
   }
 });
 
-bookGrid.addEventListener('click', async (event) => {
-  const deleteButton = event.target.closest('.btn-delete');
+bookGrid.addEventListener('click', (event) => {
+  const favoriteButton = event.target.closest('.btn-favorite');
 
-  if (!deleteButton) {
+  if (!favoriteButton) {
     return;
   }
 
-  const bookTitle = deleteButton.dataset.bookTitle || 'this book';
-  const confirmed = window.confirm(`Delete "${bookTitle}" from the library?`);
-
-  if (!confirmed) {
+  if (!currentUser) {
+    showToast('Please sign in before saving favourites.', 'error');
     return;
   }
 
-  deleteButton.disabled = true;
-  const originalText = deleteButton.textContent;
-  deleteButton.textContent = 'Deleting...';
-
-  try {
-    const response = await fetch(`/api/books/${encodeURIComponent(deleteButton.dataset.bookId)}`, {
-      method: 'DELETE'
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.error || 'Unable to delete book.');
-    }
-
-    showToast(`"${bookTitle}" deleted.`, 'success');
-    await fetchBooks();
-  } catch (err) {
-    console.error('Error deleting book:', err);
-    showToast(err.message || 'Unable to delete book.', 'error');
-    deleteButton.disabled = false;
-    deleteButton.textContent = originalText;
+  const bookId = String(favoriteButton.dataset.bookId);
+  if (favoriteIds.has(bookId)) {
+    favoriteIds.delete(bookId);
+    showToast('Removed from favourites.', 'success');
+  } else {
+    favoriteIds.add(bookId);
+    showToast('Added to favourites.', 'success');
   }
+
+  saveFavorites();
+  buildCategoryPills();
+  applyFilters();
 });
 
 // ==========================================================
@@ -192,6 +204,8 @@ function buildCategoryPills() {
   filterPills.innerHTML = `
     <button class="pill ${activeCategory === 'all' ? 'active' : ''}"
             data-category="all">All</button>
+    <button class="pill ${activeCategory === 'favorites' ? 'active' : ''}"
+            data-category="favorites">Favourites</button>
     ${categories.map(cat => `
       <button class="pill ${activeCategory === cat ? 'active' : ''}"
               data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>
@@ -223,7 +237,9 @@ function applyFilters() {
   let filtered = allBooks;
 
   // Filter by category (unless "all")
-  if (activeCategory !== 'all') {
+  if (activeCategory === 'favorites') {
+    filtered = filtered.filter(b => favoriteIds.has(String(b.id)));
+  } else if (activeCategory !== 'all') {
     filtered = filtered.filter(b => b.category === activeCategory);
   }
 
@@ -241,6 +257,39 @@ function applyFilters() {
 
 // Listen for keystrokes in the search input
 searchInput.addEventListener('input', applyFilters);
+
+authButton.addEventListener('click', () => {
+  if (currentUser) {
+    const shouldSignOut = window.confirm(`Sign out ${currentUser}?`);
+
+    if (!shouldSignOut) {
+      return;
+    }
+
+    currentUser = '';
+    localStorage.removeItem('libraryUser');
+    favoriteIds = loadFavorites();
+    updateAuthButton();
+    buildCategoryPills();
+    applyFilters();
+    showToast('Signed out.', 'success');
+    return;
+  }
+
+  const name = window.prompt('Enter your name to sign in:');
+
+  if (!name || !name.trim()) {
+    return;
+  }
+
+  currentUser = name.trim().slice(0, 32);
+  localStorage.setItem('libraryUser', currentUser);
+  favoriteIds = loadFavorites();
+  updateAuthButton();
+  buildCategoryPills();
+  applyFilters();
+  showToast(`Signed in as ${currentUser}.`, 'success');
+});
 
 // ==========================================================
 //  5. UPDATE HERO STATISTICS
@@ -268,6 +317,7 @@ addBookForm.addEventListener('submit', async (e) => {
   const author          = document.getElementById('input-author').value.trim();
   const category        = document.getElementById('input-category').value;
   const cover_image_url = document.getElementById('input-cover').value.trim();
+  const cover_file      = document.getElementById('input-cover-file').files[0];
   const book_file       = document.getElementById('input-file').files[0];
 
   // Basic check
@@ -286,6 +336,10 @@ addBookForm.addEventListener('submit', async (e) => {
     formData.append('author', author);
     formData.append('category', category);
     formData.append('cover_image_url', cover_image_url);
+
+    if (cover_file) {
+      formData.append('cover_file', cover_file);
+    }
 
     if (book_file) {
       formData.append('book_file', book_file);
@@ -355,4 +409,5 @@ function escapeHtml(str) {
 //  9. INITIAL LOAD
 // ==========================================================
 // When the page first loads, fetch the books from the API.
+updateAuthButton();
 fetchBooks();

@@ -315,15 +315,47 @@ function slugify(value) {
     || 'book';
 }
 
+function generatedCover(book) {
+  const title = (book.title || 'Open Book').replace(/[<&>"]/g, '');
+  const category = (book.category || book.subject || 'Library').replace(/[<&>"]/g, '');
+  const initials = title
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 3)
+    .map((word) => word[0].toUpperCase())
+    .join('');
+  const hue = [...title].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="640" height="920" viewBox="0 0 640 920">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="hsl(${hue}, 72%, 42%)"/>
+          <stop offset="100%" stop-color="hsl(${(hue + 70) % 360}, 76%, 30%)"/>
+        </linearGradient>
+      </defs>
+      <rect width="640" height="920" fill="url(#bg)"/>
+      <rect x="46" y="52" width="548" height="816" rx="22" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.35)" stroke-width="3"/>
+      <text x="320" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="92" font-weight="800" fill="white">${initials}</text>
+      <text x="320" y="675" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="white">${title}</text>
+      <text x="320" y="744" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,.78)">${category}</text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 function normalizeBook(book) {
   const fileSize = Number(book.file_size || 0);
+  const coverImageUrl = book.cover_image_url || book.cover_url || '';
 
   return {
     id: book.id,
     title: book.title,
     author: book.author,
     category: book.category || book.subject || 'General',
-    cover_image_url: book.cover_image_url || book.cover_url || '',
+    cover_image_url: coverImageUrl.startsWith('storage:')
+      ? `/api/books/${book.id}/cover`
+      : coverImageUrl || generatedCover(book),
     file_name: book.file_name || '',
     can_read: Boolean(book.storage_path && fileSize > 0)
   };
@@ -349,6 +381,11 @@ function toSupabaseBook(book) {
 function isPdfFile(file) {
   return file
     && (file.mimetype === 'application/pdf' || file.originalname.toLowerCase().endsWith('.pdf'));
+}
+
+function isImageFile(file) {
+  return file
+    && (file.mimetype?.startsWith('image/') || /\.(png|jpe?g|webp|gif)$/i.test(file.originalname));
 }
 
 function isMissingColumnError(error) {
@@ -534,7 +571,7 @@ app.get('/api/books/:id/read', async (req, res) => {
   }
 });
 
-app.delete('/api/books/:id', async (req, res) => {
+app.get('/api/books/:id/cover', async (req, res) => {
   try {
     if (!requireSupabase(res)) {
       return;
@@ -542,7 +579,7 @@ app.delete('/api/books/:id', async (req, res) => {
 
     const { data: book, error: fetchError } = await supabase
       .from('books')
-      .select('*')
+      .select('cover_image_url')
       .eq('id', req.params.id)
       .single();
 
@@ -550,41 +587,43 @@ app.delete('/api/books/:id', async (req, res) => {
       throw fetchError;
     }
 
-    const { error: deleteError } = await supabase
-      .from('books')
-      .delete()
-      .eq('id', req.params.id);
-
-    if (deleteError) {
-      throw deleteError;
+    if (!book.cover_image_url) {
+      return res.status(404).send('Cover not found');
     }
 
-    if (book.storage_path && !/^https?:\/\//i.test(book.storage_path)) {
-      const { error: storageError } = await supabase
+    if (/^https?:\/\//i.test(book.cover_image_url)) {
+      return res.redirect(book.cover_image_url);
+    }
+
+    const storagePath = book.cover_image_url.replace(/^storage:/, '');
+    const { data, error } = await supabase
         .storage
         .from(BOOKS_BUCKET)
-        .remove([book.storage_path]);
+        .createSignedUrl(storagePath, 60 * 10);
 
-      if (storageError) {
-        console.warn('Book row deleted, but storage cleanup failed:', storageError);
-      }
+    if (error) {
+      throw error;
     }
 
-    res.status(204).send();
+    res.redirect(data.signedUrl);
   } catch (err) {
-    console.error('Error deleting book:', err);
-    res.status(500).json({ error: 'Failed to delete book' });
+    console.error('Error loading cover:', err);
+    res.status(500).send('Failed to load cover');
   }
 });
 
-app.post('/api/books', upload.single('book_file'), async (req, res) => {
+app.post('/api/books', upload.fields([
+  { name: 'book_file', maxCount: 1 },
+  { name: 'cover_file', maxCount: 1 }
+]), async (req, res) => {
   try {
     if (!requireSupabase(res)) {
       return;
     }
 
     const { title, author, category, cover_image_url } = req.body;
-    const file = req.file;
+    const file = req.files?.book_file?.[0];
+    const coverFile = req.files?.cover_file?.[0];
 
     if (!title || !author) {
       return res.status(400).json({
@@ -598,7 +637,14 @@ app.post('/api/books', upload.single('book_file'), async (req, res) => {
       });
     }
 
+    if (coverFile && !isImageFile(coverFile)) {
+      return res.status(400).json({
+        error: 'Please upload a valid cover image.'
+      });
+    }
+
     let storagePath = '';
+    let coverImageUrl = cover_image_url || '';
 
     if (file) {
       storagePath = `uploads/${Date.now()}-${slugify(title)}.pdf`;
@@ -616,13 +662,17 @@ app.post('/api/books', upload.single('book_file'), async (req, res) => {
       }
     }
 
+    if (coverFile) {
+      coverImageUrl = `data:${coverFile.mimetype || 'image/jpeg'};base64,${coverFile.buffer.toString('base64')}`;
+    }
+
     let { data, error } = await supabase
       .from('books')
       .insert(toSupabaseBook({
         title,
         author,
         category: category || 'General',
-        cover_image_url: cover_image_url || '',
+        cover_image_url: coverImageUrl,
         storage_path: storagePath,
         file_name: file?.originalname || `${title}.pdf`,
         file_mime_type: file?.mimetype || 'application/pdf',

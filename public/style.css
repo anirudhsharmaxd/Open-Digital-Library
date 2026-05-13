@@ -86,6 +86,23 @@ img { max-width: 100%; display: block; }
   transition: var(--transition);
 }
 .nav-link:hover::after { width: 100%; }
+.auth-button {
+  padding: .45rem .9rem;
+  border: 1px solid rgba(108,99,255,.45);
+  border-radius: var(--radius-sm);
+  background: rgba(108,99,255,.14);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: .86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.auth-button:hover,
+.auth-button.signed-in {
+  border-color: var(--accent-3);
+  background: linear-gradient(135deg, rgba(108,99,255,.25), rgba(0,188,212,.18));
+}
 
 /* ==========================================================
    HERO SECTION
@@ -242,12 +259,12 @@ img { max-width: 100%; display: block; }
 }
 .book-actions {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   gap: .6rem;
   margin-top: 1rem;
 }
 .btn-read,
-.btn-delete {
+.btn-favorite {
   width: 100%;
   padding: .65rem .85rem;
   border: 1px solid rgba(108,99,255,.45);
@@ -262,23 +279,27 @@ img { max-width: 100%; display: block; }
 .btn-read {
   background: linear-gradient(135deg, rgba(108,99,255,.22), rgba(0,188,212,.16));
 }
+.btn-favorite {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.16);
+  color: #ffd76d;
+}
+.btn-favorite.active {
+  background: linear-gradient(135deg, rgba(255,193,7,.24), rgba(224,64,251,.16));
+  border-color: rgba(255,193,7,.55);
+}
 .btn-read:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: var(--accent-3);
   box-shadow: 0 8px 24px rgba(0,188,212,.18);
 }
-.btn-delete {
-  background: rgba(255,60,60,.12);
-  border-color: rgba(255,60,60,.35);
-  color: #ff8a8a;
-}
-.btn-delete:hover:not(:disabled) {
+.btn-favorite:hover:not(:disabled) {
   transform: translateY(-1px);
-  border-color: rgba(255,60,60,.65);
-  box-shadow: 0 8px 24px rgba(255,60,60,.15);
+  border-color: rgba(255,193,7,.65);
+  box-shadow: 0 8px 24px rgba(255,193,7,.14);
 }
 .btn-read:disabled,
-.btn-delete:disabled {
+.btn-favorite:disabled {
   cursor: not-allowed;
   opacity: .55;
 }
@@ -372,7 +393,8 @@ img { max-width: 100%; display: block; }
   .add-form { padding: 1.8rem; }
 }
 @media (max-width: 480px) {
-  .nav-links { display: none; }
+  .nav-links { gap: .6rem; }
+  .nav-link { display: none; }
   .hero-heading { font-size: 1.8rem; }
   .book-grid { grid-template-columns: 1fr; }
 }
