@@ -91,10 +91,46 @@ function renderBooks(books) {
         <div class="book-title">${escapeHtml(book.title)}</div>
         <div class="book-author">by ${escapeHtml(book.author)}</div>
         <span class="book-category">${escapeHtml(book.category)}</span>
+        <button class="btn-read"
+                type="button"
+                data-book-id="${escapeHtml(book.id)}"
+                ${book.can_read ? '' : 'disabled'}
+                title="${book.can_read ? 'Open PDF' : 'PDF file is not uploaded for this book yet'}">
+          ${book.can_read ? 'Read Book' : 'PDF Missing'}
+        </button>
       </div>
     </div>
   `).join('');
 }
+
+bookGrid.addEventListener('click', async (event) => {
+  const readButton = event.target.closest('.btn-read');
+
+  if (!readButton || readButton.disabled) {
+    return;
+  }
+
+  readButton.disabled = true;
+  const originalText = readButton.textContent;
+  readButton.textContent = 'Opening...';
+
+  try {
+    const response = await fetch(`/api/books/${encodeURIComponent(readButton.dataset.bookId)}/read`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Unable to open book.');
+    }
+
+    window.open(data.url, '_blank', 'noopener,noreferrer');
+  } catch (err) {
+    console.error('Error opening book:', err);
+    showToast(err.message || 'Unable to open book.', 'error');
+  } finally {
+    readButton.disabled = false;
+    readButton.textContent = originalText;
+  }
+});
 
 // ==========================================================
 //  3. CATEGORY FILTER PILLS
@@ -186,6 +222,7 @@ addBookForm.addEventListener('submit', async (e) => {
   const author          = document.getElementById('input-author').value.trim();
   const category        = document.getElementById('input-category').value;
   const cover_image_url = document.getElementById('input-cover').value.trim();
+  const book_file       = document.getElementById('input-file').files[0];
 
   // Basic check
   if (!title || !author) {
@@ -198,11 +235,20 @@ addBookForm.addEventListener('submit', async (e) => {
   btnSubmit.disabled = true;
 
   try {
-    // Send the POST request with a JSON body
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('author', author);
+    formData.append('category', category);
+    formData.append('cover_image_url', cover_image_url);
+
+    if (book_file) {
+      formData.append('book_file', book_file);
+    }
+
+    // Send the POST request with a multipart body so PDFs can be uploaded.
     const response = await fetch('/api/books', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, author, category, cover_image_url })
+      body: formData
     });
 
     if (!response.ok) {

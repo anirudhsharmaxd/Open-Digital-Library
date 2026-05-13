@@ -7,10 +7,18 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config({ quiet: true });
+const multer = require('multer');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BOOKS_BUCKET = process.env.SUPABASE_BOOKS_BUCKET || 'books';
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 25 * 1024 * 1024
+  }
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -88,12 +96,16 @@ function slugify(value) {
 }
 
 function normalizeBook(book) {
+  const fileSize = Number(book.file_size || 0);
+
   return {
     id: book.id,
     title: book.title,
     author: book.author,
     category: book.category || book.subject || 'General',
-    cover_image_url: book.cover_image_url || book.cover_url || ''
+    cover_image_url: book.cover_image_url || book.cover_url || '',
+    file_name: book.file_name || '',
+    can_read: Boolean(book.storage_path && fileSize > 0)
   };
 }
 
@@ -112,6 +124,11 @@ function toSupabaseBook(book) {
     file_mime_type: book.file_mime_type || 'application/pdf',
     file_size: Number(book.file_size || 0)
   };
+}
+
+function isPdfFile(file) {
+  return file
+    && (file.mimetype === 'application/pdf' || file.originalname.toLowerCase().endsWith('.pdf'));
 }
 
 function isMissingColumnError(error) {
@@ -226,18 +243,85 @@ app.get('/api/books', async (req, res) => {
   }
 });
 
-app.post('/api/books', async (req, res) => {
+app.get('/api/books/:id/read', async (req, res) => {
+  try {
+    if (!requireSupabase(res)) {
+      return;
+    }
+
+    const { data: book, error } = await supabase
+      .from('books')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!book.storage_path || Number(book.file_size || 0) <= 0) {
+      return res.status(404).json({
+        error: 'PDF file is not uploaded for this book yet.'
+      });
+    }
+
+    if (/^https?:\/\//i.test(book.storage_path)) {
+      return res.json({ url: book.storage_path });
+    }
+
+    const { data, error: signedUrlError } = await supabase
+      .storage
+      .from(BOOKS_BUCKET)
+      .createSignedUrl(book.storage_path, 60 * 10);
+
+    if (signedUrlError) {
+      throw signedUrlError;
+    }
+
+    res.json({ url: data.signedUrl });
+  } catch (err) {
+    console.error('Error opening book:', err);
+    res.status(500).json({ error: 'Failed to open book' });
+  }
+});
+
+app.post('/api/books', upload.single('book_file'), async (req, res) => {
   try {
     if (!requireSupabase(res)) {
       return;
     }
 
     const { title, author, category, cover_image_url } = req.body;
+    const file = req.file;
 
     if (!title || !author) {
       return res.status(400).json({
         error: 'Title and Author are required fields.'
       });
+    }
+
+    if (file && !isPdfFile(file)) {
+      return res.status(400).json({
+        error: 'Please upload a PDF file.'
+      });
+    }
+
+    let storagePath = '';
+
+    if (file) {
+      storagePath = `uploads/${Date.now()}-${slugify(title)}.pdf`;
+
+      const { error: uploadError } = await supabase
+        .storage
+        .from(BOOKS_BUCKET)
+        .upload(storagePath, file.buffer, {
+          contentType: file.mimetype || 'application/pdf',
+          upsert: false
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
     }
 
     let { data, error } = await supabase
@@ -246,7 +330,11 @@ app.post('/api/books', async (req, res) => {
         title,
         author,
         category: category || 'General',
-        cover_image_url: cover_image_url || ''
+        cover_image_url: cover_image_url || '',
+        storage_path: storagePath,
+        file_name: file?.originalname || `${title}.pdf`,
+        file_mime_type: file?.mimetype || 'application/pdf',
+        file_size: file?.size || 0
       }))
       .select('*')
       .single();
