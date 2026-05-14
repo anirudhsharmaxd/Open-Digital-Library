@@ -3,104 +3,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Open Digital Library</title>
-  <meta name="description" content="A free, open digital library for CS, Data Analytics, and more." />
+  <title>Discover - Open Digital Library</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav class="navbar" id="navbar">
-    <div class="nav-brand"><span class="nav-icon">📖</span><span class="nav-title">Open Digital Library</span></div>
-    <div class="nav-links">
-      <a href="#hero" class="nav-link">Home</a>
-      <a href="#books-section" class="nav-link">Browse</a>
-      <a href="#add-section" class="nav-link">Add Book</a>
-      <button type="button" class="auth-button" id="auth-button">Sign In</button>
-    </div>
-  </nav>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">THE BOOKS</div>
+      
+      <div class="menu-section">
+        <div class="menu-label">MENU</div>
+        <nav class="nav-menu">
+          <a href="#discover-section" id="nav-discover" class="nav-item active">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            Discover
+          </a>
+          <a href="#all-books-section" id="nav-category" class="nav-item">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+            Category
+          </a>
+          <a href="#all-books-section" id="nav-library" class="nav-item">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+            My Library
+          </a>
+          <a href="#all-books-section" id="nav-download" class="nav-item">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
+            Download
+          </a>
+          <a href="#all-books-section" id="nav-favorite" class="nav-item">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+            Favorite
+          </a>
+        </nav>
+      </div>
 
-  <section class="hero" id="hero">
-    <div class="hero-shape shape-1"></div>
-    <div class="hero-shape shape-2"></div>
-    <div class="hero-shape shape-3"></div>
-    <div class="hero-content">
-      <h1 class="hero-heading">Discover Your Next<br/><span class="gradient-text">Favourite Book</span></h1>
-      <p class="hero-sub">A free, open library for Computer Science, Data Analytics &amp; beyond.</p>
-      <div class="search-container glass-card" id="search-container">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="search-input" class="search-input" placeholder="Search by title, author, or category…" autocomplete="off" />
+      <div class="menu-section">
+        <div class="menu-label">SYSTEM</div>
+        <nav class="nav-menu">
+          <a href="#about-section" id="nav-about" class="nav-item">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+            About
+          </a>
+          <a href="#" id="nav-settings" class="nav-item">
+            <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
+            Settings
+          </a>
+        </nav>
       </div>
-      <div class="hero-stats" id="hero-stats">
-        <div class="stat"><span class="stat-number" id="stat-total">0</span><span class="stat-label">Books</span></div>
-        <div class="stat"><span class="stat-number" id="stat-categories">0</span><span class="stat-label">Categories</span></div>
-        <div class="stat"><span class="stat-number" id="stat-authors">0</span><span class="stat-label">Authors</span></div>
-      </div>
-    </div>
-  </section>
 
-  <section class="books-section" id="books-section">
-    <div class="section-header">
-      <h2 class="section-title">📚 Library Collection</h2>
-      <p class="section-sub">Browse through our curated selection of books</p>
-      <div class="filter-pills" id="filter-pills">
-        <button class="pill active" data-category="all">All</button>
-      </div>
-    </div>
-    <div class="book-grid" id="book-grid">
-      <div class="loading-skeleton">
-        <div class="skeleton-card"></div><div class="skeleton-card"></div>
-        <div class="skeleton-card"></div><div class="skeleton-card"></div>
-      </div>
-    </div>
-  </section>
 
-  <section class="add-section" id="add-section">
-    <div class="section-header">
-      <h2 class="section-title">➕ Add a New Book</h2>
-      <p class="section-sub">Contribute to the library by adding a new book</p>
-    </div>
-    <form class="add-form glass-card" id="add-book-form" autocomplete="off">
-      <div class="form-group">
-        <label for="input-title">Book Title *</label>
-        <input type="text" id="input-title" placeholder="e.g. Design Patterns" required />
+
+      <div class="library-promo">
+        <div class="promo-icon">
+          <div class="promo-dot d1"></div>
+          <div class="promo-dot d2"></div>
+          <svg class="promo-wave" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,50 Q25,20 50,50 T100,50 V100 H0 Z" fill="rgba(255,255,255,0.2)"></path>
+          </svg>
+        </div>
+        <div class="promo-text">BOOK LIBRARY</div>
       </div>
-      <div class="form-group">
-        <label for="input-author">Author *</label>
-        <input type="text" id="input-author" placeholder="e.g. Erich Gamma" required />
-      </div>
-      <div class="form-group">
-        <label for="input-category">Category</label>
-        <select id="input-category">
-          <option value="Computer Science">Computer Science</option>
-          <option value="Data Analytics">Data Analytics</option>
-          <option value="Software Engineering">Software Engineering</option>
-          <option value="Mathematics">Mathematics</option>
-          <option value="General">General</option>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-background"></div>
+
+      <div class="content-wrapper">
+        <div class="top-header" style="justify-content: flex-end;">
+          <div class="header-title" style="font-size: 1.5rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 0.5rem; letter-spacing: 0.5px;">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent-orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            Open Digital Library
+          </div>
+        </div>
+
+        <div class="discover-header">
+          <h1 class="page-title">Discover</h1>
+          
+          <div class="search-bar">
+            <select id="category-select" class="cat-select">
+              <option value="all">All Categories</option>
+            </select>
+            <div class="search-divider"></div>
+            <div class="search-input-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="#a0a0a0" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="search-input" placeholder="find the book you like..." />
+            </div>
+            <button class="btn-search" id="btn-search">Search</button>
+          </div>
+        </div>
+
+        <section class="recommendation-section" id="discover-section">
+          <div class="section-top">
+            <h2 class="section-heading">Book Recomendation</h2>
+            <a href="#all-books-section" class="btn-view-all" style="text-decoration:none; display:inline-block;">View all ></a>
+          </div>
+          
+          <div class="book-slider" id="recommended-grid">
+            <!-- Books injected by JS -->
+          </div>
+        </section>
+
+        <section class="all-books-section" id="all-books-section" style="margin-top: 3rem;">
+          <div class="section-top">
+            <h2 class="section-heading">All Books</h2>
+          </div>
+          <div class="book-grid-wrap" id="all-books-grid">
+            <!-- Books injected by JS -->
+          </div>
+        </section>
+
+        <section class="about-section" id="about-section" style="margin-top: 4rem; margin-bottom: 4rem;">
+          <div class="section-top">
+            <h2 class="section-heading">About Open Digital Library</h2>
+          </div>
+          <div class="about-content" style="background: var(--sidebar-bg); padding: 2.5rem; border-radius: var(--radius); box-shadow: 0 10px 25px rgba(0,0,0,0.03);">
+            <p style="margin-bottom: 1.5rem; line-height: 1.8; color: var(--text-gray); font-size: 1.05rem;">Open Digital Library is a modern platform designed to provide accessible and free educational resources to everyone. Our mission is to digitize and make available high-quality books, research papers, and learning materials across various subjects.</p>
+            <p style="line-height: 1.8; color: var(--text-gray); font-size: 1.05rem;">Built with a focus on user experience, this library offers a seamless, beautiful reading environment. Whether you are a student, researcher, or avid reader, you can discover, save, and enjoy a vast collection of digital books directly in your browser.</p>
+          </div>
+        </section>
+
+        <section class="add-section" id="add-section">
+          <div class="section-top">
+            <h2 class="section-heading">Add a New Book</h2>
+          </div>
+          <div class="add-form-container">
+            <form class="add-form" id="add-book-form" autocomplete="off">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="input-title">Book Title *</label>
+                  <input type="text" id="input-title" placeholder="e.g. Design Patterns" required />
+                </div>
+                <div class="form-group">
+                  <label for="input-author">Author *</label>
+                  <input type="text" id="input-author" placeholder="e.g. Erich Gamma" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="input-category">Category</label>
+                  <select id="input-category">
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Data Analytics">Data Analytics</option>
+                    <option value="Software Engineering">Software Engineering</option>
+                    <option value="Design">Design</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Money">Money</option>
+                    <option value="Motivation">Motivation</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="input-cover">Cover Image URL</label>
+                  <input type="url" id="input-cover" placeholder="https://example.com/cover.jpg" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="input-cover-file">Cover Image Upload</label>
+                  <input type="file" id="input-cover-file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                </div>
+                <div class="form-group">
+                  <label for="input-file">PDF File</label>
+                  <input type="file" id="input-file" accept="application/pdf,.pdf" />
+                </div>
+              </div>
+              <button type="submit" class="btn-submit" id="btn-submit">
+                <span class="btn-text">Add Book</span>
+                <span class="btn-loader" id="btn-loader"></span>
+              </button>
+              <div id="settings-modal" class="modal">
+    <div class="modal-content" style="max-width: 400px; padding: 2.5rem;">
+      <span class="close-modal" id="close-settings">&times;</span>
+      <h2 style="margin-bottom: 1.5rem; color: var(--text-dark);">Settings</h2>
+      <div>
+        <label style="font-weight: 600; display: block; margin-bottom: 0.8rem; color: var(--text-dark);">Appearance</label>
+        <select id="theme-select" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--input-border, #ccc); background: var(--sidebar-bg); color: var(--text-dark); font-family: inherit; font-size: 1rem; cursor: pointer;">
+          <option value="light">Light Theme</option>
+          <option value="dark">Dark Theme</option>
         </select>
       </div>
-      <div class="form-group">
-        <label for="input-cover">Cover Image URL</label>
-        <input type="url" id="input-cover" placeholder="https://example.com/cover.jpg" />
-      </div>
-      <div class="form-group">
-        <label for="input-cover-file">Cover Image Upload</label>
-        <input type="file" id="input-cover-file" accept="image/png,image/jpeg,image/webp,image/gif" />
-      </div>
-      <div class="form-group">
-        <label for="input-file">PDF File</label>
-        <input type="file" id="input-file" accept="application/pdf,.pdf" />
-      </div>
-      <button type="submit" class="btn-submit" id="btn-submit">
-        <span class="btn-text">Add Book</span>
-        <span class="btn-loader" id="btn-loader"></span>
-      </button>
-      <div class="toast" id="toast"></div>
-    </form>
-  </section>
+    </div>
+  </div>
 
-  <footer class="footer"><p>&copy; 2026 Open Digital Library &mdash; A College Project</p></footer>
+  <div id="toast" class="toast"></div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

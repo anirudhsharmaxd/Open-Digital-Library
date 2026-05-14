@@ -25,272 +25,438 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const seedBooks = [
   {
-    title: 'Introduction to Algorithms',
-    author: 'Thomas H. Cormen',
-    category: 'Computer Science',
-    cover_image_url: 'https://m.media-amazon.com/images/I/41SNoh5ZhOL._SX440_BO1,204,203,200_.jpg'
+    "title": "Think Python, 2nd Edition",
+    "author": "Allen B. Downey",
+    "category": "Computer Science",
+    "storage_path": "https://greenteapress.com/thinkpython2/thinkpython2.pdf",
+    "file_name": "Think Python.pdf",
+    "file_size": 1
+  ,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/7363360-L.jpg"
   },
   {
-    title: 'Clean Code',
-    author: 'Robert C. Martin',
-    category: 'Software Engineering',
-    cover_image_url: 'https://m.media-amazon.com/images/I/41xShlnTZTL._SX376_BO1,204,203,200_.jpg'
+    "title": "Think Stats, 2nd Edition",
+    "author": "Allen B. Downey",
+    "category": "Data Analytics",
+    "storage_path": "https://greenteapress.com/thinkstats2/thinkstats2.pdf",
+    "file_name": "Think Stats.pdf",
+    "file_size": 1
+  ,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/6956191-L.jpg"
   },
   {
-    title: 'Python Data Science Handbook',
-    author: 'Jake VanderPlas',
-    category: 'Data Analytics',
-    cover_image_url: 'https://m.media-amazon.com/images/I/51a0VvGBJwL._SX379_BO1,204,203,200_.jpg'
+    "title": "Think DSP",
+    "author": "Allen B. Downey",
+    "category": "Computer Science",
+    "storage_path": "https://greenteapress.com/thinkdsp/thinkdsp.pdf",
+    "file_name": "Think DSP.pdf",
+    "file_size": 1,
+    "cover_image_url": "/covers/think_dsp.svg"
   },
   {
-    title: 'Database System Concepts',
-    author: 'Abraham Silberschatz',
-    category: 'Computer Science',
-    cover_image_url: 'https://m.media-amazon.com/images/I/51YgFhknDaL._SX400_BO1,204,203,200_.jpg'
+    "title": "Automate the Boring Stuff with Python",
+    "author": "Al Sweigart",
+    "category": "Software Engineering",
+    "storage_path": "https://automatetheboringstuff.com/",
+    "file_name": "Automate the Boring Stuff.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/7363640-L.jpg"
   },
   {
-    title: 'The Pragmatic Programmer',
-    author: 'David Thomas & Andrew Hunt',
-    category: 'Software Engineering',
-    cover_image_url: 'https://m.media-amazon.com/images/I/51cUVaBWZzL._SX380_BO1,204,203,200_.jpg'
+    "title": "Python for Everybody",
+    "author": "Charles R. Severance",
+    "category": "Computer Science",
+    "storage_path": "https://www.py4e.com/book.pdf",
+    "file_name": "Python for Everybody.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8512502-L.jpg"
   },
   {
-    title: 'Hands-On Machine Learning',
-    author: 'Aurelien Geron',
-    category: 'Data Analytics',
-    cover_image_url: 'https://m.media-amazon.com/images/I/51aqYc1QyrL._SX379_BO1,204,203,200_.jpg'
+    "title": "Eloquent JavaScript",
+    "author": "Marijn Haverbeke",
+    "category": "Software Engineering",
+    "storage_path": "https://eloquentjavascript.net/Eloquent_JavaScript.pdf",
+    "file_name": "Eloquent JavaScript.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/7082166-L.jpg"
   },
   {
-    title: 'Computer Networking: A Top-Down Approach',
-    author: 'James Kurose & Keith Ross',
-    category: 'Computer Science',
-    cover_image_url: 'https://m.media-amazon.com/images/I/51xp1+oHURL._SX430_BO1,204,203,200_.jpg'
+    "title": "Pro Git",
+    "author": "Scott Chacon and Ben Straub",
+    "category": "Software Engineering",
+    "storage_path": "https://github.com/progit/progit2/releases/download/2.1.373/progit.pdf",
+    "file_name": "Pro Git.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/7892827-L.jpg"
   },
   {
-    title: 'Storytelling with Data',
-    author: 'Cole Nussbaumer Knaflic',
-    category: 'Data Analytics',
-    cover_image_url: 'https://m.media-amazon.com/images/I/41bom5v0sQL._SX397_BO1,204,203,200_.jpg'
+    "title": "The Rust Programming Language",
+    "author": "Steve Klabnik and Carol Nichols",
+    "category": "Software Engineering",
+    "storage_path": "https://doc.rust-lang.org/stable/book/",
+    "file_name": "Rust Book.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8508621-L.jpg"
   },
   {
-    title: 'Think Python, 2nd Edition',
-    author: 'Allen B. Downey',
-    category: 'Computer Science',
-    storage_path: 'https://greenteapress.com/thinkpython2/thinkpython2.pdf',
-    file_name: 'Think Python, 2nd Edition.pdf',
-    file_size: 1
+    "title": "Effective Go",
+    "author": "The Go Authors",
+    "category": "Software Engineering",
+    "storage_path": "https://go.dev/doc/effective_go",
+    "file_name": "Effective Go.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/13282520-L.jpg"
   },
   {
-    title: 'Think Stats, 2nd Edition',
-    author: 'Allen B. Downey',
-    category: 'Data Analytics',
-    storage_path: 'https://greenteapress.com/thinkstats2/thinkstats2.pdf',
-    file_name: 'Think Stats, 2nd Edition.pdf',
-    file_size: 1
+    "title": "Crafting Interpreters",
+    "author": "Robert Nystrom",
+    "category": "Computer Science",
+    "storage_path": "https://craftinginterpreters.com/",
+    "file_name": "Crafting Interpreters.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/12075000-L.jpg"
   },
   {
-    title: 'Think Bayes, 2nd Edition',
-    author: 'Allen B. Downey',
-    category: 'Data Analytics',
-    storage_path: 'https://allendowney.github.io/ThinkBayes2/',
-    file_name: 'Think Bayes, 2nd Edition.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Structure and Interpretation of Computer Programs",
+    "author": "Harold Abelson and Gerald Jay Sussman",
+    "category": "Computer Science",
+    "storage_path": "https://web.mit.edu/alexmv/6.037/sicp.pdf",
+    "file_name": "SICP.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/149338-L.jpg"
   },
   {
-    title: 'Think DSP',
-    author: 'Allen B. Downey',
-    category: 'Computer Science',
-    storage_path: 'https://greenteapress.com/thinkdsp/thinkdsp.pdf',
-    file_name: 'Think DSP.pdf',
-    file_size: 1
+    "title": "Operating Systems: Three Easy Pieces",
+    "author": "Remzi H. Arpaci-Dusseau",
+    "category": "Computer Science",
+    "storage_path": "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+    "file_name": "OSTEP.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "/covers/ostep.svg"
   },
   {
-    title: 'Automate the Boring Stuff with Python',
-    author: 'Al Sweigart',
-    category: 'Computer Science',
-    storage_path: 'https://automatetheboringstuff.com/2e/',
-    file_name: 'Automate the Boring Stuff with Python.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "The Missing Semester of Your CS Education",
+    "author": "MIT CSAIL",
+    "category": "Computer Science",
+    "storage_path": "https://missing.csail.mit.edu/",
+    "file_name": "Missing Semester.html",
+    "file_mime_type": "text/html",
+    "file_size": 1
+  ,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/14753550-L.jpg"
   },
   {
-    title: 'Python for Everybody',
-    author: 'Charles R. Severance',
-    category: 'Computer Science',
-    storage_path: 'https://www.py4e.com/book',
-    file_name: 'Python for Everybody.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Composing Programs",
+    "author": "John DeNero",
+    "category": "Computer Science",
+    "storage_path": "https://www.composingprograms.com/",
+    "file_name": "Composing Programs.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10162292-L.jpg"
   },
   {
-    title: 'Eloquent JavaScript',
-    author: 'Marijn Haverbeke',
-    category: 'Computer Science',
-    storage_path: 'https://eloquentjavascript.net/',
-    file_name: 'Eloquent JavaScript.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "How to Design Programs",
+    "author": "Matthias Felleisen",
+    "category": "Software Engineering",
+    "storage_path": "https://htdp.org/",
+    "file_name": "HTDP.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8126199-L.jpg"
   },
   {
-    title: 'Pro Git',
-    author: 'Scott Chacon and Ben Straub',
-    category: 'Software Engineering',
-    storage_path: 'https://git-scm.com/book/en/v2',
-    file_name: 'Pro Git.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "OCaml Programming",
+    "author": "Michael R. Clarkson",
+    "category": "Computer Science",
+    "storage_path": "https://cs3110.github.io/textbook/",
+    "file_name": "OCaml Book.html",
+    "file_mime_type": "text/html",
+    "file_size": 1
+  ,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/7269686-L.jpg"
   },
   {
-    title: 'The Rust Programming Language',
-    author: 'Steve Klabnik and Carol Nichols',
-    category: 'Software Engineering',
-    storage_path: 'https://doc.rust-lang.org/book/',
-    file_name: 'The Rust Programming Language.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Python Data Science Handbook",
+    "author": "Jake VanderPlas",
+    "category": "Data Analytics",
+    "storage_path": "https://jakevdp.github.io/PythonDataScienceHandbook/",
+    "file_name": "Python Data Science Handbook.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8512092-L.jpg"
   },
   {
-    title: 'Effective Go',
-    author: 'The Go Authors',
-    category: 'Software Engineering',
-    storage_path: 'https://go.dev/doc/effective_go',
-    file_name: 'Effective Go.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Python for Data Analysis",
+    "author": "Wes McKinney",
+    "category": "Data Analytics",
+    "storage_path": "https://wesmckinney.com/book/",
+    "file_name": "Python for Data Analysis.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/7548132-L.jpg"
   },
   {
-    title: 'Crafting Interpreters',
-    author: 'Robert Nystrom',
-    category: 'Computer Science',
-    storage_path: 'https://craftinginterpreters.com/',
-    file_name: 'Crafting Interpreters.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Computational and Inferential Thinking",
+    "author": "Ani Adhikari and John DeNero",
+    "category": "Data Analytics",
+    "storage_path": "https://inferentialthinking.com/",
+    "file_name": "Inferential Thinking.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "/covers/inferential_thinking.svg"
   },
   {
-    title: 'Structure and Interpretation of Computer Programs',
-    author: 'Harold Abelson, Gerald Jay Sussman, and Julie Sussman',
-    category: 'Computer Science',
-    storage_path: 'https://web.mit.edu/6.001/6.037/sicp.pdf',
-    file_name: 'Structure and Interpretation of Computer Programs.pdf',
-    file_size: 1
+    "title": "Statistical Thinking for the 21st Century",
+    "author": "Russell A. Poldrack",
+    "category": "Data Analytics",
+    "storage_path": "https://statsthinking21.github.io/statsthinking21-core-site/",
+    "file_name": "Statistical Thinking.html",
+    "file_mime_type": "text/html",
+    "file_size": 1
+  ,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/511582-L.jpg"
   },
   {
-    title: 'Operating Systems: Three Easy Pieces',
-    author: 'Remzi H. Arpaci-Dusseau and Andrea C. Arpaci-Dusseau',
-    category: 'Computer Science',
-    storage_path: 'https://pages.cs.wisc.edu/~remzi/OSTEP/',
-    file_name: 'Operating Systems Three Easy Pieces.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "OpenIntro Statistics",
+    "author": "David Diez, Mine Cetinkaya-Rundel",
+    "category": "Data Analytics",
+    "storage_path": "https://www.openintro.org/book/os/",
+    "file_name": "OpenIntro Statistics.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10793380-L.jpg"
   },
   {
-    title: 'The Missing Semester of Your CS Education',
-    author: 'MIT CSAIL',
-    category: 'Computer Science',
-    storage_path: 'https://missing.csail.mit.edu/',
-    file_name: 'The Missing Semester.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Mining of Massive Datasets",
+    "author": "Jure Leskovec, Anand Rajaraman, Jeff Ullman",
+    "category": "Data Analytics",
+    "storage_path": "http://www.mmds.org/mmds/v3.0/mmds-v3.0.pdf",
+    "file_name": "MMDS.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10039901-L.jpg"
   },
   {
-    title: 'Composing Programs',
-    author: 'John DeNero',
-    category: 'Computer Science',
-    storage_path: 'https://www.composingprograms.com/',
-    file_name: 'Composing Programs.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Dive Into Systems",
+    "author": "Suzanne J. Matthews",
+    "category": "Computer Science",
+    "storage_path": "https://diveintosystems.org/",
+    "file_name": "Dive Into Systems.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/13835185-L.jpg"
   },
   {
-    title: 'How to Design Programs',
-    author: 'Matthias Felleisen et al.',
-    category: 'Computer Science',
-    storage_path: 'https://htdp.org/2023-8-14/Book/index.html',
-    file_name: 'How to Design Programs.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Deep Learning",
+    "author": "Ian Goodfellow, Yoshua Bengio",
+    "category": "Data Analytics",
+    "storage_path": "https://www.deeplearningbook.org/",
+    "file_name": "Deep Learning.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8086288-L.jpg"
   },
   {
-    title: 'OCaml Programming: Correct + Efficient + Beautiful',
-    author: 'Michael R. Clarkson et al.',
-    category: 'Computer Science',
-    storage_path: 'https://cs3110.github.io/textbook/cover.html',
-    file_name: 'OCaml Programming.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "The Shape of Design",
+    "author": "Frank Chimero",
+    "category": "Design",
+    "storage_path": "https://shapeofdesignbook.com/The-Shape-of-Design.pdf",
+    "file_name": "The Shape of Design.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8719207-L.jpg"
   },
   {
-    title: 'Python Data Science Handbook',
-    author: 'Jake VanderPlas',
-    category: 'Data Analytics',
-    storage_path: 'https://jakevdp.github.io/PythonDataScienceHandbook/',
-    file_name: 'Python Data Science Handbook.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Practical Typography",
+    "author": "Matthew Butterick",
+    "category": "Design",
+    "storage_path": "https://practicaltypography.com/",
+    "file_name": "Practical Typography.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/12953977-L.jpg"
   },
   {
-    title: 'Python for Data Analysis',
-    author: 'Wes McKinney',
-    category: 'Data Analytics',
-    storage_path: 'https://wesmckinney.com/book/',
-    file_name: 'Python for Data Analysis.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Design's Iron Fist",
+    "author": "Jarrod Drysdale",
+    "category": "Design",
+    "storage_path": "https://bootcamp.com/designs-iron-fist",
+    "file_name": "Designs Iron Fist.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10532990-L.jpg"
   },
   {
-    title: 'Computational and Inferential Thinking',
-    author: 'Ani Adhikari, John DeNero, and David Wagner',
-    category: 'Data Analytics',
-    storage_path: 'https://www.inferentialthinking.com/chapters/intro',
-    file_name: 'Computational and Inferential Thinking.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Pixel Perfect Precision",
+    "author": "ustwo",
+    "category": "Design",
+    "storage_path": "https://ustwo.com/ppp/",
+    "file_name": "Pixel Perfect Precision.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/8300234-L.jpg"
   },
   {
-    title: 'Statistical Thinking for the 21st Century',
-    author: 'Russell A. Poldrack',
-    category: 'Data Analytics',
-    storage_path: 'https://statsthinking21.github.io/statsthinking21-core-site/',
-    file_name: 'Statistical Thinking for the 21st Century.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Web Typography",
+    "author": "Richard Rutter",
+    "category": "Design",
+    "storage_path": "http://webtypography.net/",
+    "file_name": "Web Typography.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/12567437-L.jpg"
   },
   {
-    title: 'OpenIntro Statistics',
-    author: 'David M. Diez, Mine Cetinkaya-Rundel, and Christopher D. Barr',
-    category: 'Data Analytics',
-    storage_path: 'https://www.openintro.org/book/os/',
-    file_name: 'OpenIntro Statistics.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Psychology 2e",
+    "author": "OpenStax",
+    "category": "Psychology",
+    "storage_path": "https://assets.openstax.org/oscms-prodcms/media/documents/Psychology2e-WEB.pdf",
+    "file_name": "Psychology 2e.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10188612-L.jpg"
   },
   {
-    title: 'Mining of Massive Datasets',
-    author: 'Jure Leskovec, Anand Rajaraman, and Jeff Ullman',
-    category: 'Data Analytics',
-    storage_path: 'http://infolab.stanford.edu/~ullman/mmds/book.pdf',
-    file_name: 'Mining of Massive Datasets.pdf',
-    file_size: 1
+    "title": "The Principles of Psychology",
+    "author": "William James",
+    "category": "Psychology",
+    "storage_path": "https://www.gutenberg.org/files/57732/57732-h/57732-h.htm",
+    "file_name": "Principles of Psychology.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/5815742-L.jpg"
   },
   {
-    title: 'Dive Into Systems',
-    author: 'Suzanne J. Matthews, Tia Newhall, and Kevin C. Webb',
-    category: 'Computer Science',
-    storage_path: 'https://diveintosystems.org/book/',
-    file_name: 'Dive Into Systems.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "Dream Psychology",
+    "author": "Sigmund Freud",
+    "category": "Psychology",
+    "storage_path": "https://www.gutenberg.org/files/15489/15489-h/15489-h.htm",
+    "file_name": "Dream Psychology.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/13180633-L.jpg"
   },
   {
-    title: 'Deep Learning',
-    author: 'Ian Goodfellow, Yoshua Bengio, and Aaron Courville',
-    category: 'Data Analytics',
-    storage_path: 'https://www.deeplearningbook.org/',
-    file_name: 'Deep Learning.html',
-    file_mime_type: 'text/html',
-    file_size: 1
+    "title": "The Crowd: A Study of the Popular Mind",
+    "author": "Gustave Le Bon",
+    "category": "Psychology",
+    "storage_path": "https://www.gutenberg.org/files/445/445-h/445-h.htm",
+    "file_name": "The Crowd.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/526366-L.jpg"
+  },
+  {
+    "title": "Human Nature and Conduct",
+    "author": "John Dewey",
+    "category": "Psychology",
+    "storage_path": "https://www.gutenberg.org/files/41158/41158-h/41158-h.htm",
+    "file_name": "Human Nature and Conduct.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/1788756-L.jpg"
+  },
+  {
+    "title": "The Wealth of Nations",
+    "author": "Adam Smith",
+    "category": "Money",
+    "storage_path": "https://www.gutenberg.org/files/3300/3300-h/3300-h.htm",
+    "file_name": "Wealth of Nations.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/12816911-L.jpg"
+  },
+  {
+    "title": "Think and Grow Rich",
+    "author": "Napoleon Hill",
+    "category": "Money",
+    "storage_path": "https://www.gutenberg.org/files/32509/32509-h/32509-h.htm",
+    "file_name": "Think and Grow Rich.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/14542536-L.jpg"
+  },
+  {
+    "title": "The Richest Man in Babylon",
+    "author": "George S. Clason",
+    "category": "Money",
+    "storage_path": "https://example.com/richest-man-in-babylon.pdf",
+    "file_name": "Richest Man in Babylon.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10491331-L.jpg"
+  },
+  {
+    "title": "The Art of Money Getting",
+    "author": "P.T. Barnum",
+    "category": "Money",
+    "storage_path": "https://www.gutenberg.org/files/8581/8581-h/8581-h.htm",
+    "file_name": "Art of Money Getting.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/756095-L.jpg"
+  },
+  {
+    "title": "Economics 3e",
+    "author": "OpenStax",
+    "category": "Money",
+    "storage_path": "https://assets.openstax.org/oscms-prodcms/media/documents/Economics3e-WEB.pdf",
+    "file_name": "Economics 3e.pdf",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/10188613-L.jpg"
+  },
+  {
+    "title": "As a Man Thinketh",
+    "author": "James Allen",
+    "category": "Motivation",
+    "storage_path": "https://www.gutenberg.org/files/4507/4507-h/4507-h.htm",
+    "file_name": "As a Man Thinketh.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/6268048-L.jpg"
+  },
+  {
+    "title": "Meditations",
+    "author": "Marcus Aurelius",
+    "category": "Motivation",
+    "storage_path": "https://www.gutenberg.org/files/2680/2680-h/2680-h.htm",
+    "file_name": "Meditations.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/211529-L.jpg"
+  },
+  {
+    "title": "The Science of Getting Rich",
+    "author": "Wallace D. Wattles",
+    "category": "Motivation",
+    "storage_path": "https://www.gutenberg.org/files/59844/59844-h/59844-h.htm",
+    "file_name": "Science of Getting Rich.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/854989-L.jpg"
+  },
+  {
+    "title": "Self-Reliance",
+    "author": "Ralph Waldo Emerson",
+    "category": "Motivation",
+    "storage_path": "https://www.gutenberg.org/files/16643/16643-h/16643-h.htm",
+    "file_name": "Self-Reliance.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/14845607-L.jpg"
+  },
+  {
+    "title": "Acres of Diamonds",
+    "author": "Russell H. Conwell",
+    "category": "Motivation",
+    "storage_path": "https://www.gutenberg.org/files/368/368-h/368-h.htm",
+    "file_name": "Acres of Diamonds.html",
+    "file_mime_type": "text/html",
+    "file_size": 1,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/5833160-L.jpg"
   }
 ];
 
@@ -317,27 +483,58 @@ function slugify(value) {
 
 function generatedCover(book) {
   const title = (book.title || 'Open Book').replace(/[<&>"]/g, '');
+  const author = (book.author || 'Unknown').replace(/[<&>"]/g, '');
   const category = (book.category || book.subject || 'Library').replace(/[<&>"]/g, '');
-  const initials = title
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 3)
-    .map((word) => word[0].toUpperCase())
-    .join('');
-  const hue = [...title].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
+  const hue1 = [...title].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
+  const hue2 = (hue1 + 60) % 360;
+  
+  // Basic word wrapping for SVG text
+  const words = title.split(' ');
+  const lines = [];
+  let currentLine = '';
+  for (const word of words) {
+    if ((currentLine + word).length > 15) {
+      if (currentLine) lines.push(currentLine.trim());
+      currentLine = word + ' ';
+    } else {
+      currentLine += word + ' ';
+    }
+  }
+  if (currentLine) lines.push(currentLine.trim());
+  
+  const titleYStart = 450 - ((lines.length - 1) * 35);
+  
+  const titleTexts = lines.map((line, i) => 
+    `<text x="300" y="${titleYStart + (i * 75)}" text-anchor="middle" font-family="Arial, sans-serif" font-size="56" font-weight="800" fill="white" style="text-shadow: 2px 4px 10px rgba(0,0,0,0.5);">${line}</text>`
+  ).join('');
+
   const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="640" height="920" viewBox="0 0 640 920">
+    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
       <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="hsl(${hue}, 72%, 42%)"/>
-          <stop offset="100%" stop-color="hsl(${(hue + 70) % 360}, 76%, 30%)"/>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="hsl(${hue1}, 75%, 40%)"/>
+          <stop offset="100%" stop-color="hsl(${hue2}, 80%, 20%)"/>
         </linearGradient>
+        <pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+          <circle cx="15" cy="15" r="1.5" fill="rgba(255,255,255,0.08)" />
+        </pattern>
       </defs>
-      <rect width="640" height="920" fill="url(#bg)"/>
-      <rect x="46" y="52" width="548" height="816" rx="22" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.35)" stroke-width="3"/>
-      <text x="320" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="92" font-weight="800" fill="white">${initials}</text>
-      <text x="320" y="675" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="white">${title}</text>
-      <text x="320" y="744" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,.78)">${category}</text>
+      <rect width="600" height="900" fill="url(#bg)"/>
+      <rect width="600" height="900" fill="url(#dots)"/>
+      
+      <!-- Top banner -->
+      <path d="M 0 0 L 220 0 L 180 55 L 0 55 Z" fill="rgba(255,255,255,0.15)"/>
+      <text x="30" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" letter-spacing="1" text-transform="uppercase">${category.substring(0, 15)}</text>
+      
+      <!-- Abstract shapes -->
+      <circle cx="300" cy="450" r="220" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="60"/>
+      <circle cx="300" cy="450" r="140" fill="rgba(255,255,255,0.05)"/>
+      
+      ${titleTexts}
+      
+      <!-- Author Footer -->
+      <rect x="0" y="780" width="600" height="120" fill="rgba(0,0,0,0.25)"/>
+      <text x="300" y="850" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="1.5">${author}</text>
     </svg>
   `;
 
@@ -348,14 +545,22 @@ function normalizeBook(book) {
   const fileSize = Number(book.file_size || 0);
   const coverImageUrl = book.cover_image_url || book.cover_url || '';
 
+  let finalCoverUrl;
+  if (coverImageUrl.startsWith('storage:')) {
+    finalCoverUrl = `/api/books/${book.id}/cover`;
+  } else if (coverImageUrl.startsWith('data:') || coverImageUrl.startsWith('/covers/') || coverImageUrl.includes('openlibrary.org')) {
+    finalCoverUrl = coverImageUrl;
+  } else {
+    // Ignore external URLs (like the Amazon seed ones) so ALL books use the engaging generated cover
+    finalCoverUrl = generatedCover(book);
+  }
+
   return {
     id: book.id,
     title: book.title,
     author: book.author,
     category: book.category || book.subject || 'General',
-    cover_image_url: coverImageUrl.startsWith('storage:')
-      ? `/api/books/${book.id}/cover`
-      : coverImageUrl || generatedCover(book),
+    cover_image_url: finalCoverUrl,
     file_name: book.file_name || '',
     can_read: Boolean(book.storage_path && fileSize > 0)
   };
@@ -477,7 +682,7 @@ async function ensureSeedBooks() {
         && existingBook.storage_path
         && Number(existingBook.file_size || 0) > 0;
 
-      if (existingBook && !alreadyReadable) {
+      if (existingBook) {
         const { error: updateError } = await supabase
           .from('books')
           .update(toSupabaseBook(book))

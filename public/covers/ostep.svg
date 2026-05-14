@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="50%" stop-color="#2d1150"/>
+      <stop offset="100%" stop-color="#16082a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="piece1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="piece2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="piece3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.4)"/></filter>
+  </defs>
+  <rect width="600" height="900" fill="url(#bg)"/>
+  <circle cx="500" cy="150" r="200" fill="rgba(168,85,247,0.06)"/>
+  <circle cx="100" cy="700" r="220" fill="rgba(6,182,212,0.05)"/>
+  <!-- Three Pieces -->
+  <g filter="url(#shadow)">
+    <!-- Piece 1 - Process (top-left) -->
+    <g transform="translate(100, 340)">
+      <rect width="120" height="120" rx="20" fill="url(#piece1)" opacity="0.9"/>
+      <circle cx="60" cy="45" r="18" fill="none" stroke="white" stroke-width="2.5" opacity="0.8"/>
+      <path d="M52 70 L68 70 M60 62 L60 78" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+      <text x="60" y="108" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="white" opacity="0.7" letter-spacing="1">PROCESS</text>
+    </g>
+    <!-- Piece 2 - Memory (center) -->
+    <g transform="translate(240, 310)">
+      <rect width="120" height="120" rx="20" fill="url(#piece2)" opacity="0.9"/>
+      <rect x="35" y="30" width="50" height="12" rx="3" fill="white" opacity="0.7"/>
+      <rect x="35" y="48" width="50" height="12" rx="3" fill="white" opacity="0.5"/>
+      <rect x="35" y="66" width="50" height="12" rx="3" fill="white" opacity="0.3"/>
+      <text x="60" y="108" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="white" opacity="0.7" letter-spacing="1">MEMORY</text>
+    </g>
+    <!-- Piece 3 - Concurrency (right) -->
+    <g transform="translate(380, 350)">
+      <rect width="120" height="120" rx="20" fill="url(#piece3)" opacity="0.9"/>
+      <line x1="40" y1="40" x2="40" y2="80" stroke="white" stroke-width="2.5" opacity="0.7"/>
+      <line x1="60" y1="35" x2="60" y2="85" stroke="white" stroke-width="2.5" opacity="0.5"/>
+      <line x1="80" y1="42" x2="80" y2="78" stroke="white" stroke-width="2.5" opacity="0.7"/>
+      <text x="60" y="108" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="white" opacity="0.7" letter-spacing="1">CONCURRENCY</text>
+    </g>
+  </g>
+  <!-- Connection lines between pieces -->
+  <line x1="220" y1="400" x2="240" y2="370" stroke="rgba(168,85,247,0.3)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <line x1="360" y1="370" x2="380" y2="410" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <!-- Floating particles -->
+  <circle cx="150" cy="290" r="4" fill="#a855f7" opacity="0.4"/>
+  <circle cx="430" cy="300" r="3" fill="#06b6d4" opacity="0.3"/>
+  <circle cx="300" cy="490" r="5" fill="#f59e0b" opacity="0.3"/>
+  <circle cx="500" cy="500" r="3" fill="#a855f7" opacity="0.2"/>
+  <circle cx="80" cy="480" r="4" fill="#06b6d4" opacity="0.25"/>
+  <!-- Category badge -->
+  <rect x="30" y="30" width="195" height="38" rx="19" fill="rgba(168,85,247,0.15)" stroke="rgba(168,85,247,0.3)" stroke-width="1"/>
+  <text x="128" y="55" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="600" fill="#c084fc" letter-spacing="2">COMPUTER SCIENCE</text>
+  <!-- Title -->
+  <text x="300" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="36" font-weight="300" fill="rgba(255,255,255,0.6)" letter-spacing="2">Operating Systems</text>
+  <text x="300" y="190" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="800" fill="white">Three Easy</text>
+  <text x="300" y="248" text-anchor="middle" font-family="Arial,sans-serif" font-size="52" font-weight="900" fill="url(#accent)" letter-spacing="2">Pieces</text>
+  <line x1="180" y1="270" x2="420" y2="270" stroke="rgba(245,158,11,0.25)" stroke-width="1"/>
+  <!-- Bottom section -->
+  <rect x="0" y="790" width="600" height="110" fill="rgba(0,0,0,0.4)"/>
+  <text x="300" y="835" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.4)" letter-spacing="3">WRITTEN BY</text>
+  <text x="300" y="866" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="600" fill="rgba(255,255,255,0.9)">Remzi H. Arpaci-Dusseau</text>
+</svg>

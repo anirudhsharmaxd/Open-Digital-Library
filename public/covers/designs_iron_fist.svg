@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#be123c"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </linearGradient>
+    <radialGradient id="psyGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#be123c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="900" fill="url(#bg)"/>
+  
+  <rect x="180" y="40" width="240" height="35" rx="17.5" fill="rgba(255,255,255,0.1)"/>
+  <text x="300" y="63" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="white" letter-spacing="2" text-transform="uppercase">Design</text>
+  
+  <text x="300" y="200" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="60" font-weight="800" fill="white" letter-spacing="-1">Design's Iron</text>
+  <text x="300" y="260" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="60" font-weight="800" fill="white" letter-spacing="-1">Fist</text>
+  
+  
+  <line x1="250" y1="330" x2="350" y2="330" stroke="#fb7185" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Creative Nano Banana Art -->
+  
+        <circle cx="350" cy="550" r="150" fill="none" stroke="#f43f5e" stroke-width="4" stroke-dasharray="10, 10" />
+        <rect x="250" y="450" width="200" height="200" fill="none" stroke="#fb7185" stroke-width="2" transform="rotate(25 350 550)" />
+        <path d="M 100 400 L 500 700 M 500 400 L 100 700" stroke="#f43f5e" stroke-width="1" opacity="0.5"/>
+        <g transform="scale(0.8) translate(80, 20)">
+           
+      <!-- Banana Body -->
+      <path d="M 230 450 C 230 650, 380 700, 500 550 C 400 750, 180 650, 230 450 Z" fill="#facc15" stroke="#ca8a04" stroke-width="6" stroke-linejoin="round"/>
+      <!-- Banana Stem -->
+      <path d="M 230 450 L 210 420 L 240 410 L 250 440 Z" fill="#a3e635" stroke="#4d7c0f" stroke-width="4" stroke-linejoin="round"/>
+      <!-- Banana Tip -->
+      <path d="M 500 550 L 515 545 L 510 565 Z" fill="#422006" />
+      <!-- Banana Peel Detail -->
+      <path d="M 245 475 C 245 600, 350 640, 460 560" fill="none" stroke="#fef08a" stroke-width="8" stroke-linecap="round"/>
+    
+        </g>
+        
+
+  <rect x="0" y="780" width="600" height="120" fill="rgba(0,0,0,0.3)"/>
+  <text x="300" y="830" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="400" fill="rgba(255,255,255,0.6)" letter-spacing="3">WRITTEN BY</text>
+  <text x="300" y="865" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">Jarrod Drysdale</text>
+</svg>

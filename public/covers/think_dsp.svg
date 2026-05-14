@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#091a2a"/>
+    </linearGradient>
+    <linearGradient id="w1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#6c63ff"/>
+    </linearGradient>
+    <linearGradient id="w2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ffc8"/>
+      <stop offset="100%" stop-color="#0099ff"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="600" height="900" fill="url(#bg)"/>
+  <circle cx="480" cy="200" r="180" fill="rgba(0,212,255,0.06)"/>
+  <circle cx="120" cy="650" r="200" fill="rgba(108,99,255,0.05)"/>
+  <g filter="url(#glow)" opacity="0.9">
+    <path d="M0 350 Q75 270 150 350 Q225 430 300 350 Q375 270 450 350 Q525 430 600 350" fill="none" stroke="url(#w1)" stroke-width="3"/>
+  </g>
+  <g filter="url(#glow)" opacity="0.7">
+    <path d="M0 440 Q40 380 80 420 Q120 460 160 400 Q200 340 240 420 Q280 500 320 440 Q360 380 400 440 Q440 500 480 420 Q520 340 560 440 Q580 480 600 440" fill="none" stroke="url(#w2)" stroke-width="2.5"/>
+  </g>
+  <g filter="url(#glow)" opacity="0.5">
+    <path d="M0 530 L50 530 L50 490 L100 490 L100 530 L150 530 L150 480 L200 480 L200 540 L250 540 L250 500 L300 500 L300 530 L350 530 L350 485 L400 485 L400 535 L450 535 L450 495 L500 495 L500 530 L550 530 L550 500 L600 500" fill="none" stroke="#ff6b9d" stroke-width="2"/>
+  </g>
+  <g opacity="0.3">
+    <rect x="80" y="570" width="8" height="40" rx="4" fill="#00d4ff"/>
+    <rect x="110" y="555" width="8" height="55" rx="4" fill="#0099ff"/>
+    <rect x="140" y="540" width="8" height="70" rx="4" fill="#4d7bff"/>
+    <rect x="170" y="530" width="8" height="80" rx="4" fill="#6c63ff"/>
+    <rect x="200" y="545" width="8" height="65" rx="4" fill="#8b5cf6"/>
+    <rect x="230" y="555" width="8" height="55" rx="4" fill="#c850c0"/>
+    <rect x="260" y="540" width="8" height="70" rx="4" fill="#ff6b9d"/>
+    <rect x="290" y="560" width="8" height="50" rx="4" fill="#c850c0"/>
+    <rect x="320" y="545" width="8" height="65" rx="4" fill="#6c63ff"/>
+    <rect x="350" y="530" width="8" height="80" rx="4" fill="#4d7bff"/>
+    <rect x="380" y="540" width="8" height="70" rx="4" fill="#0099ff"/>
+    <rect x="410" y="555" width="8" height="55" rx="4" fill="#00d4ff"/>
+    <rect x="440" y="565" width="8" height="45" rx="4" fill="#0099ff"/>
+    <rect x="470" y="550" width="8" height="60" rx="4" fill="#4d7bff"/>
+    <rect x="500" y="560" width="8" height="50" rx="4" fill="#6c63ff"/>
+  </g>
+  <rect x="30" y="30" width="195" height="38" rx="19" fill="rgba(0,212,255,0.12)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+  <text x="128" y="55" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="600" fill="#00d4ff" letter-spacing="2">COMPUTER SCIENCE</text>
+  <text x="300" y="165" text-anchor="middle" font-family="Arial,sans-serif" font-size="72" font-weight="800" fill="white">Think</text>
+  <text x="300" y="248" text-anchor="middle" font-family="Arial,sans-serif" font-size="82" font-weight="900" fill="#00d4ff" letter-spacing="4">DSP</text>
+  <text x="300" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="rgba(255,255,255,0.45)" letter-spacing="3">DIGITAL SIGNAL PROCESSING</text>
+  <line x1="200" y1="300" x2="400" y2="300" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+  <rect x="0" y="790" width="600" height="110" fill="rgba(0,0,0,0.4)"/>
+  <text x="300" y="835" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.4)" letter-spacing="3">WRITTEN BY</text>
+  <text x="300" y="866" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="600" fill="rgba(255,255,255,0.9)">Allen B. Downey</text>
+</svg>

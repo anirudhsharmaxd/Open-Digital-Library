@@ -1,249 +1,157 @@
 // ==========================================================
 //  app.js — Frontend JavaScript for Open Digital Library
 // ==========================================================
-// This script does four main things:
-//   1. Fetches the list of books from the backend API.
-//   2. Renders book cards into the grid on the page.
-//   3. Handles the search bar (filters books in real-time).
-//   4. Handles the "Add Book" form submission via POST.
-// ==========================================================
 
-// ----------------------------------------------------------
-//  Global state
-// ----------------------------------------------------------
-// We keep the full list of books in memory so we can filter
-// them on the client side without hitting the server again.
 let allBooks = [];
-
-// ----------------------------------------------------------
-//  DOM references — grab important elements once
-// ----------------------------------------------------------
-const bookGrid      = document.getElementById('book-grid');
-const searchInput   = document.getElementById('search-input');
-const filterPills   = document.getElementById('filter-pills');
-const addBookForm   = document.getElementById('add-book-form');
-const btnSubmit     = document.getElementById('btn-submit');
-const toast         = document.getElementById('toast');
-const statTotal     = document.getElementById('stat-total');
-const statCategories= document.getElementById('stat-categories');
-const statAuthors   = document.getElementById('stat-authors');
-const authButton    = document.getElementById('auth-button');
-
-// Track current active category filter
-let activeCategory = 'all';
-let currentUser = localStorage.getItem('libraryUser') || '';
 let favoriteIds = loadFavorites();
 
-function favoritesKey() {
-  return `libraryFavorites:${currentUser || 'guest'}`;
-}
+const recommendedGrid = document.getElementById('recommended-grid');
+const allBooksGrid = document.getElementById('all-books-grid');
+const searchInput = document.getElementById('search-input');
+const btnSearch = document.getElementById('btn-search');
+const categorySelect = document.getElementById('category-select');
+const addBookForm = document.getElementById('add-book-form');
+const btnSubmit = document.getElementById('btn-submit');
+const toast = document.getElementById('toast');
+
+// Navigation links
+const navDiscover = document.getElementById('nav-discover');
+const navCategory = document.getElementById('nav-category');
+const navLibrary = document.getElementById('nav-library');
+const navDownload = document.getElementById('nav-download');
+const navFavorite = document.getElementById('nav-favorite');
+
+let activeCategory = 'all';
 
 function loadFavorites() {
   try {
-    return new Set(JSON.parse(localStorage.getItem(favoritesKey()) || '[]'));
+    return new Set(JSON.parse(localStorage.getItem('libraryFavorites') || '[]'));
   } catch (err) {
     return new Set();
   }
 }
 
 function saveFavorites() {
-  localStorage.setItem(favoritesKey(), JSON.stringify([...favoriteIds]));
+  localStorage.setItem('libraryFavorites', JSON.stringify([...favoriteIds]));
 }
-
-function updateAuthButton() {
-  authButton.textContent = currentUser ? `Hi, ${currentUser}` : 'Sign In';
-  authButton.classList.toggle('signed-in', Boolean(currentUser));
-}
-
-// ==========================================================
-//  1. FETCH BOOKS FROM THE API
-// ==========================================================
-// This function calls GET /api/books, stores the result,
-// and then renders the book cards on the page.
 
 async function fetchBooks() {
   try {
     const response = await fetch('/api/books');
-
-    // If the server returns an error status, throw
     if (!response.ok) throw new Error('Server error');
-
-    // Parse the JSON array of books
     allBooks = await response.json();
-
-    // Build the category filter pills
-    buildCategoryPills();
-
-    // Update the hero statistics
-    updateStats();
-
-    // Render the cards
-    renderBooks(allBooks);
+    
+    buildCategoryDropdown();
+    renderRecommended();
+    applyFilters();
   } catch (err) {
     console.error('Failed to load books:', err);
-    bookGrid.innerHTML = '<p class="no-results">⚠️ Could not load books. Is the server running?</p>';
+    if (recommendedGrid) recommendedGrid.innerHTML = '<p class="no-results">⚠️ Could not load books.</p>';
   }
 }
 
-// ==========================================================
-//  2. RENDER BOOK CARDS
-// ==========================================================
-// Takes an array of book objects and injects HTML cards
-// into the #book-grid container.
-
-function renderBooks(books) {
-  // If the array is empty, show a "no results" message
-  if (books.length === 0) {
-    bookGrid.innerHTML = '<p class="no-results">No books found matching your search.</p>';
-    return;
-  }
-
-  // Build all cards as an HTML string, then inject at once
-  // (much faster than creating DOM nodes one-by-one)
-  bookGrid.innerHTML = books.map((book, index) => `
-    <div class="book-card" style="animation-delay: ${index * 0.07}s">
-      <div class="book-cover-wrap">
-        ${book.cover_image_url
-          ? `<img class="book-cover"
-                  src="${escapeHtml(book.cover_image_url)}"
-                  alt="Cover of ${escapeHtml(book.title)}"
-                  onerror="this.parentElement.innerHTML='<span class=book-cover-fallback>📕</span>'" />`
-          : '<span class="book-cover-fallback">📕</span>'
-        }
-      </div>
-      <div class="book-info">
-        <div class="book-title">${escapeHtml(book.title)}</div>
-        <div class="book-author">by ${escapeHtml(book.author)}</div>
-        <span class="book-category">${escapeHtml(book.category)}</span>
-        <div class="book-actions">
-          <button class="btn-favorite ${favoriteIds.has(String(book.id)) ? 'active' : ''}"
-                  type="button"
-                  data-book-id="${escapeHtml(book.id)}"
-                  title="Mark as favourite">
-            ${favoriteIds.has(String(book.id)) ? 'Favourite' : 'Mark Favourite'}
-          </button>
-          <button class="btn-read"
-                  type="button"
-                  data-book-id="${escapeHtml(book.id)}"
-                  ${book.can_read ? '' : 'disabled'}
-                  title="${book.can_read ? 'Open book' : 'File is not uploaded for this book yet'}">
-            ${book.can_read ? 'Read Book' : 'File Missing'}
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-bookGrid.addEventListener('click', async (event) => {
-  const readButton = event.target.closest('.btn-read');
-
-  if (!readButton || readButton.disabled) {
-    return;
-  }
-
-  readButton.disabled = true;
-  const originalText = readButton.textContent;
-  readButton.textContent = 'Opening...';
-
-  try {
-    const response = await fetch(`/api/books/${encodeURIComponent(readButton.dataset.bookId)}/read`);
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Unable to open book.');
-    }
-
-    window.open(data.url, '_blank', 'noopener,noreferrer');
-  } catch (err) {
-    console.error('Error opening book:', err);
-    showToast(err.message || 'Unable to open book.', 'error');
-  } finally {
-    readButton.disabled = false;
-    readButton.textContent = originalText;
-  }
-});
-
-bookGrid.addEventListener('click', (event) => {
-  const favoriteButton = event.target.closest('.btn-favorite');
-
-  if (!favoriteButton) {
-    return;
-  }
-
-  if (!currentUser) {
-    showToast('Please sign in before saving favourites.', 'error');
-    return;
-  }
-
-  const bookId = String(favoriteButton.dataset.bookId);
-  if (favoriteIds.has(bookId)) {
-    favoriteIds.delete(bookId);
-    showToast('Removed from favourites.', 'success');
+function generateBookCardHTML(book) {
+  const isFav = favoriteIds.has(String(book.id));
+  
+  let coverHtml = '';
+  if (book.cover_image_url) {
+    coverHtml = `<img class="book-cover" src="${escapeHtml(book.cover_image_url)}" alt="${escapeHtml(book.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                 <div class="book-info-fallback" style="display:none;">
+                   <div class="book-title-fb">${escapeHtml(book.title)}</div>
+                   <div class="book-author-fb">${escapeHtml(book.author)}</div>
+                 </div>`;
   } else {
-    favoriteIds.add(bookId);
-    showToast('Added to favourites.', 'success');
+    coverHtml = `<div class="book-info-fallback">
+                   <div class="book-title-fb">${escapeHtml(book.title)}</div>
+                   <div class="book-author-fb">${escapeHtml(book.author)}</div>
+                 </div>`;
   }
 
-  saveFavorites();
-  buildCategoryPills();
-  applyFilters();
-});
-
-// ==========================================================
-//  3. CATEGORY FILTER PILLS
-// ==========================================================
-// Dynamically creates filter buttons based on the unique
-// categories found in the book list.
-
-function buildCategoryPills() {
-  // Get unique categories
-  const categories = [...new Set(allBooks.map(b => b.category))];
-
-  // Build pill buttons — "All" is always first
-  filterPills.innerHTML = `
-    <button class="pill ${activeCategory === 'all' ? 'active' : ''}"
-            data-category="all">All</button>
-    <button class="pill ${activeCategory === 'favorites' ? 'active' : ''}"
-            data-category="favorites">Favourites</button>
-    ${categories.map(cat => `
-      <button class="pill ${activeCategory === cat ? 'active' : ''}"
-              data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>
-    `).join('')}
+  return `
+  <div class="book-card">
+    ${coverHtml}
+    <div class="book-hover-actions">
+      <button class="btn-action-hover primary btn-read" data-book-id="${escapeHtml(book.id)}" ${book.can_read ? '' : 'disabled'}>
+        ${book.can_read ? 'Read Book' : 'File Missing'}
+      </button>
+      <button class="btn-action-hover btn-favorite ${isFav ? 'active' : ''}" data-book-id="${escapeHtml(book.id)}">
+        ${isFav ? 'Remove Fav' : 'Favorite'}
+      </button>
+    </div>
+  </div>
   `;
-
-  // Attach click listeners to each pill
-  filterPills.querySelectorAll('.pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      activeCategory = pill.dataset.category;
-
-      // Update the active class on pills
-      filterPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-
-      // Re-apply the combined search + category filter
-      applyFilters();
-    });
-  });
 }
 
-// ==========================================================
-//  4. SEARCH + FILTER LOGIC
-// ==========================================================
+function renderRecommended() {
+  const recommended = allBooks.slice(0, 5); // Show 5 books in landing section
+  if (recommendedGrid) {
+    recommendedGrid.innerHTML = recommended.map(generateBookCardHTML).join('');
+  }
+}
+
+function renderAllBooks(books) {
+  if (books.length === 0) {
+    allBooksGrid.innerHTML = '<p class="no-results">No books found matching your search.</p>';
+    return;
+  }
+  allBooksGrid.innerHTML = books.map(generateBookCardHTML).join('');
+}
+
+document.addEventListener('click', async (event) => {
+  const readButton = event.target.closest('.btn-read');
+  const favButton = event.target.closest('.btn-favorite');
+
+  if (readButton && !readButton.disabled) {
+    readButton.disabled = true;
+    const originalText = readButton.textContent;
+    readButton.textContent = 'Opening...';
+    try {
+      const response = await fetch(`/api/books/${encodeURIComponent(readButton.dataset.bookId)}/read`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Unable to open book.');
+      window.open(data.url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      showToast(err.message || 'Unable to open book.', 'error');
+    } finally {
+      readButton.disabled = false;
+      readButton.textContent = originalText;
+    }
+  }
+
+  if (favButton) {
+    const bookId = String(favButton.dataset.bookId);
+    if (favoriteIds.has(bookId)) {
+      favoriteIds.delete(bookId);
+      showToast('Removed from favourites.', 'success');
+    } else {
+      favoriteIds.add(bookId);
+      showToast('Added to favourites.', 'success');
+    }
+    saveFavorites();
+    renderRecommended(); // re-render to update heart buttons
+    applyFilters();
+  }
+});
+
+function buildCategoryDropdown() {
+  const categories = [...new Set(allBooks.map(b => b.category))];
+  categorySelect.innerHTML = `
+    <option value="all">All Categories</option>
+    <option value="favorites">Favourites</option>
+    ${categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('')}
+  `;
+}
 
 function applyFilters() {
   const query = searchInput.value.toLowerCase().trim();
-
   let filtered = allBooks;
 
-  // Filter by category (unless "all")
   if (activeCategory === 'favorites') {
     filtered = filtered.filter(b => favoriteIds.has(String(b.id)));
   } else if (activeCategory !== 'all') {
     filtered = filtered.filter(b => b.category === activeCategory);
   }
 
-  // Filter by search query (matches title, author, or category)
   if (query) {
     filtered = filtered.filter(book =>
       book.title.toLowerCase().includes(query) ||
@@ -252,83 +160,121 @@ function applyFilters() {
     );
   }
 
-  renderBooks(filtered);
+  renderAllBooks(filtered);
 }
 
-// Listen for keystrokes in the search input
-searchInput.addEventListener('input', applyFilters);
+// Side Nav Functional Logic
+function setActiveNav(element) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  if (element) element.classList.add('active');
+}
 
-authButton.addEventListener('click', () => {
-  if (currentUser) {
-    const shouldSignOut = window.confirm(`Sign out ${currentUser}?`);
-
-    if (!shouldSignOut) {
-      return;
-    }
-
-    currentUser = '';
-    localStorage.removeItem('libraryUser');
-    favoriteIds = loadFavorites();
-    updateAuthButton();
-    buildCategoryPills();
-    applyFilters();
-    showToast('Signed out.', 'success');
-    return;
-  }
-
-  const name = window.prompt('Enter your name to sign in:');
-
-  if (!name || !name.trim()) {
-    return;
-  }
-
-  currentUser = name.trim().slice(0, 32);
-  localStorage.setItem('libraryUser', currentUser);
-  favoriteIds = loadFavorites();
-  updateAuthButton();
-  buildCategoryPills();
+navDiscover?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navDiscover);
+  activeCategory = 'all';
+  categorySelect.value = 'all';
+  searchInput.value = '';
   applyFilters();
-  showToast(`Signed in as ${currentUser}.`, 'success');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// ==========================================================
-//  5. UPDATE HERO STATISTICS
-// ==========================================================
-// Counts total books, unique categories, and unique authors.
+navCategory?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navCategory);
+  document.getElementById('all-books-section').scrollIntoView({ behavior: 'smooth' });
+  categorySelect.focus();
+});
 
-function updateStats() {
-  statTotal.textContent      = allBooks.length;
-  statCategories.textContent = new Set(allBooks.map(b => b.category)).size;
-  statAuthors.textContent    = new Set(allBooks.map(b => b.author)).size;
-}
+navLibrary?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navLibrary);
+  activeCategory = 'favorites';
+  categorySelect.value = 'favorites';
+  applyFilters();
+  document.getElementById('all-books-section').scrollIntoView({ behavior: 'smooth' });
+});
 
-// ==========================================================
-//  6. ADD BOOK FORM SUBMISSION
-// ==========================================================
-// When the form is submitted, we POST the new book to the API
-// and refresh the book list on success.
+navFavorite?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navFavorite);
+  activeCategory = 'favorites';
+  categorySelect.value = 'favorites';
+  applyFilters();
+  document.getElementById('all-books-section').scrollIntoView({ behavior: 'smooth' });
+});
+
+navDownload?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navDownload);
+  activeCategory = 'all';
+  categorySelect.value = 'all';
+  applyFilters();
+  document.getElementById('all-books-section').scrollIntoView({ behavior: 'smooth' });
+});
+
+const navAbout = document.getElementById('nav-about');
+navAbout?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navAbout);
+  document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' });
+});
+
+// Settings & Theme
+const navSettings = document.getElementById('nav-settings');
+const settingsModal = document.getElementById('settings-modal');
+const closeSettingsBtn = document.getElementById('close-settings');
+const themeSelect = document.getElementById('theme-select');
+
+navSettings?.addEventListener('click', (e) => {
+  e.preventDefault();
+  setActiveNav(navSettings);
+  settingsModal.classList.add('active');
+});
+
+closeSettingsBtn?.addEventListener('click', () => {
+  settingsModal.classList.remove('active');
+});
+
+// Load theme
+const currentTheme = localStorage.getItem('libraryTheme') || 'light';
+document.documentElement.setAttribute('data-theme', currentTheme);
+themeSelect.value = currentTheme;
+
+themeSelect.addEventListener('change', (e) => {
+  const newTheme = e.target.value;
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('libraryTheme', newTheme);
+});
+
+searchInput.addEventListener('input', applyFilters);
+btnSearch.addEventListener('click', () => {
+  applyFilters();
+  document.getElementById('all-books-section').scrollIntoView({ behavior: 'smooth' });
+});
+categorySelect.addEventListener('change', (e) => {
+  activeCategory = e.target.value;
+  applyFilters();
+  document.getElementById('all-books-section').scrollIntoView({ behavior: 'smooth' });
+});
 
 addBookForm.addEventListener('submit', async (e) => {
-  // Prevent the default browser form-submit (page reload)
   e.preventDefault();
 
-  // Read the form values
-  const title           = document.getElementById('input-title').value.trim();
-  const author          = document.getElementById('input-author').value.trim();
-  const category        = document.getElementById('input-category').value;
+  const title = document.getElementById('input-title').value.trim();
+  const author = document.getElementById('input-author').value.trim();
+  const category = document.getElementById('input-category').value;
   const cover_image_url = document.getElementById('input-cover').value.trim();
-  const cover_file      = document.getElementById('input-cover-file').files[0];
-  const book_file       = document.getElementById('input-file').files[0];
+  const cover_file = document.getElementById('input-cover-file').files[0];
+  const book_file = document.getElementById('input-file').files[0];
 
-  // Basic check
   if (!title || !author) {
     showToast('Please fill in Title and Author.', 'error');
     return;
   }
 
-  // Show loading spinner on the button
-  btnSubmit.classList.add('loading');
   btnSubmit.disabled = true;
+  btnSubmit.textContent = 'Adding...';
 
   try {
     const formData = new FormData();
@@ -336,16 +282,9 @@ addBookForm.addEventListener('submit', async (e) => {
     formData.append('author', author);
     formData.append('category', category);
     formData.append('cover_image_url', cover_image_url);
+    if (cover_file) formData.append('cover_file', cover_file);
+    if (book_file) formData.append('book_file', book_file);
 
-    if (cover_file) {
-      formData.append('cover_file', cover_file);
-    }
-
-    if (book_file) {
-      formData.append('book_file', book_file);
-    }
-
-    // Send the POST request with a multipart body so PDFs can be uploaded.
     const response = await fetch('/api/books', {
       method: 'POST',
       body: formData
@@ -356,47 +295,25 @@ addBookForm.addEventListener('submit', async (e) => {
       throw new Error(errData.error || 'Server error');
     }
 
-    // Success! Show a toast and reset the form
     showToast(`"${title}" added successfully! 🎉`, 'success');
     addBookForm.reset();
-
-    // Refresh the book grid to include the new book
     await fetchBooks();
-
-    // Scroll up to the book grid so the user can see the new book
-    document.getElementById('books-section').scrollIntoView({ behavior: 'smooth' });
-
   } catch (err) {
-    console.error('Error adding book:', err);
     showToast(err.message || 'Failed to add book.', 'error');
   } finally {
-    // Remove the loading state
-    btnSubmit.classList.remove('loading');
     btnSubmit.disabled = false;
+    btnSubmit.textContent = 'Add Book';
   }
 });
 
-// ==========================================================
-//  7. TOAST NOTIFICATION HELPER
-// ==========================================================
-// Shows a small success/error message below the form.
-
 function showToast(message, type) {
   toast.textContent = message;
-  toast.className   = 'toast show ' + type;
-
-  // Auto-hide after 4 seconds
+  toast.className = 'toast show ' + type;
   clearTimeout(toast._timer);
   toast._timer = setTimeout(() => {
     toast.classList.remove('show');
   }, 4000);
 }
-
-// ==========================================================
-//  8. HTML ESCAPE HELPER (prevent XSS)
-// ==========================================================
-// Replaces special characters so user-supplied text is
-// rendered as plain text, never as HTML.
 
 function escapeHtml(str) {
   if (!str) return '';
@@ -405,9 +322,4 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-// ==========================================================
-//  9. INITIAL LOAD
-// ==========================================================
-// When the page first loads, fetch the books from the API.
-updateAuthButton();
 fetchBooks();
